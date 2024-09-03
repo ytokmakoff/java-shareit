@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class UserController {
     }
 
     @PatchMapping("{userId}")
-    public User update( @PathVariable long userId, @Valid @RequestBody UserDto userDto) {
+    public User update(@PathVariable long userId, @Valid @RequestBody UserDto userDto) {
         log.info("UserController: update is called");
         User user = userService.update(userId, userDto);
         log.info("UserController: updated successfully");
