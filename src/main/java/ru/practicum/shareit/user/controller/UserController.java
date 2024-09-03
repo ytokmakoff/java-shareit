@@ -1,4 +1,4 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.user.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
