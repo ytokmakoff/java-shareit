@@ -10,10 +10,12 @@ import java.util.*;
 @Repository
 public class ItemRepositoryImpl implements ItemRepository {
     private final Map<Long, Item> items = new HashMap<>();
+    private final Map<Long, List<Item>> itemsByUser = new HashMap<>();
 
     @Override
     public Item create(Item item) {
         items.put(item.getId(), item);
+        itemsByUser.computeIfAbsent(item.getOwner().getId(), k -> new ArrayList<>()).add(item);
         return item;
     }
 
@@ -30,8 +32,7 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public List<ItemDto> allItemsFromUser(long userId) {
-        return items.values().stream()
-                .filter(item -> item.getOwner().getId() == userId)
+        return itemsByUser.get(userId).stream()
                 .map(ItemMapper::itemToDto)
                 .toList();
     }
