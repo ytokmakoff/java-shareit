@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(User user) {
-        if (isEmailContains(user.getEmail()))
+        if (isEmailExist(user.getEmail()))
             throw new EmailAlreadyExistException("Email: " + user.getEmail() + " already exist");
         user.setId(generateId());
         return userRepository.create(user);
@@ -40,11 +40,23 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.getById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found"));
 
-        if (userDto.getEmail() != null && isEmailContains(userDto.getEmail())) {
+        if (userDto.getEmail() != null && isEmailExist(userDto.getEmail())) {
             throw new EmailAlreadyExistException("Email: " + userDto.getEmail() + " already exist");
         }
+        User updatedUser = updateUserDetails(user, userDto);
+        userRepository.deleteById(userId, user);
 
-        return userRepository.update(user, userDto);
+        return userRepository.create(updatedUser);
+    }
+
+    private User updateUserDetails(User user, UserDto userDto) {
+        if (userDto.getName() != null) {
+            user.setName(userDto.getName());
+        }
+        if (userDto.getEmail() != null) {
+            user.setEmail(userDto.getEmail());
+        }
+        return user;
     }
 
     @Override
@@ -54,7 +66,7 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(userId, user);
     }
 
-    private boolean isEmailContains(String email) {
+    private boolean isEmailExist(String email) {
         return userRepository.getEmails().contains(email);
     }
 
