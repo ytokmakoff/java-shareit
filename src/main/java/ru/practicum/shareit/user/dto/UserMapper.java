@@ -6,6 +6,7 @@ public class UserMapper {
     private UserMapper() {
 
     }
+
     public static User dtoToUser(UserDto userDto) {
         User user = new User();
         user.setId(userDto.getId());
