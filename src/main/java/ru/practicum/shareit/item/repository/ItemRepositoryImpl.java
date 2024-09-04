@@ -38,10 +38,15 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public List<ItemDto> search(String text) {
+        if (text == null || text.isBlank())
+            return List.of();
+
+        String lowerCaseText = text.toLowerCase();
+
         return items.values().stream()
                 .filter(Item::getAvailable)
-                .filter(item -> item.getDescription().toLowerCase().contains(text.toLowerCase())
-                                || item.getName().toLowerCase().contains(text.toLowerCase()))
+                .filter(item -> item.getDescription().toLowerCase().contains(lowerCaseText)
+                                || item.getName().toLowerCase().contains(lowerCaseText))
                 .map(ItemMapper::itemToDto)
                 .toList();
     }
