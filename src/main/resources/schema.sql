@@ -1,46 +1,43 @@
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS items;
-DROP TABLE IF EXISTS bookings;
-DROP TABLE IF EXISTS comments;
-
-
 CREATE TABLE IF NOT EXISTS users
 (
-    id    BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id    SERIAL PRIMARY KEY,
     name  VARCHAR(255),
     email VARCHAR(255),
     CONSTRAINT UQ_USER_EMAIL UNIQUE (email)
+
 );
 
 CREATE TABLE IF NOT EXISTS items
 (
-    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id          SERIAL PRIMARY KEY,
     name        VARCHAR(255),
     description VARCHAR(255),
     available   BOOLEAN,
-    owner       BIGINT,
-    CONSTRAINT fk_owner_for_items FOREIGN KEY (owner) REFERENCES users (id)
+    owner       INTEGER,
+    CONSTRAINT fk_owner FOREIGN KEY (owner) REFERENCES users (id)
 );
 
 CREATE TABLE IF NOT EXISTS bookings
 (
-    id              BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id              SERIAL PRIMARY KEY,
     start_date_time TIMESTAMP,
     end_date_time   TIMESTAMP,
-    item            BIGINT,
-    booker          BIGINT,
+    item            INTEGER,
+    booker          iNTEGER,
     status          VARCHAR(20),
-    CONSTRAINT fk_item_for_bookings FOREIGN KEY (item) REFERENCES items (id),
-    CONSTRAINT fk_booker_for_bookings FOREIGN KEY (booker) REFERENCES users (id)
+
+    CONSTRAINT fk_item FOREIGN KEY (item) REFERENCES items (id),
+    CONSTRAINT fk_booker FOREIGN KEY (booker) REFERENCES users (id)
 );
 
 CREATE TABLE IF NOT EXISTS comments
 (
-    id      BIGINT AUTO_INCREMENT PRIMARY KEY,
-    text    VARCHAR(255),
-    item_id BIGINT,
-    user_id BIGINT,
-    created TIMESTAMP,
-    CONSTRAINT fk_item_fo_comments FOREIGN KEY (item_id) REFERENCES items(id),
-    CONSTRAINT fk_user_for_comments FOREIGN KEY (user_id) REFERENCES users(id)
+    id      SERIAL PRIMARY KEY,
+    text    varchar(255),
+    item_id iNTEGER,
+    user_id INTEGER,
+    created DATE,
+
+    CONSTRAINT fk_item FOREIGN KEY (item_id) REFERENCES items(id),
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users (id)
 );
