@@ -6,10 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Setter
 @Getter
 @AllArgsConstructor
-public class ItemDto {
+public class ItemWithBookingDateDto {
     private long id;
     @NotBlank
     private String name;
@@ -17,4 +19,7 @@ public class ItemDto {
     private String description;
     @NotNull
     private Boolean available;
+
+    private LocalDateTime lastBooking;
+    private LocalDateTime nextBooking;
 }
