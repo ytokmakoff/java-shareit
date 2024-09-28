@@ -17,12 +17,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/items")
 public class ItemController {
-    public static final String X_SHARER_USER_ID = "X-Sharer-User-Id";
     private final ItemService itemService;
 
     @PostMapping
     public Item create(@RequestBody @Valid ItemDto itemDto,
-                       @RequestHeader(X_SHARER_USER_ID) long userId) {
+                       @RequestHeader("X-Sharer-User-Id") long userId) {
         log.info("ItemController: create is called");
         Item item = itemService.create(itemDto, userId);
         log.info("ItemController: item created successfully");
@@ -32,7 +31,7 @@ public class ItemController {
     @PatchMapping("{itemId}")
     public Item update(@PathVariable long itemId,
                        @RequestBody UpdateItemDto itemDto,
-                       @RequestHeader(X_SHARER_USER_ID) long userId) {
+                       @RequestHeader("X-Sharer-User-Id") long userId) {
         log.info("ItemController: update is called");
         Item item = itemService.update(itemId, itemDto, userId);
         log.info("ItemController: item updated successfully");
@@ -48,7 +47,7 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemDto> allItemsFromUser(@RequestHeader(X_SHARER_USER_ID) long userId) {
+    public List<ItemDto> allItemsFromUser(@RequestHeader("X-Sharer-User-Id") long userId) {
         log.info("ItemController: allItemsFromUser is called");
         List<ItemDto> items = itemService.allItemsFromUser(userId);
         log.info("ItemController: all items from user successfully received");
