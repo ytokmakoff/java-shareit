@@ -2,75 +2,69 @@ package ru.practicum.shareit.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.exception.user.EmailAlreadyExistException;
+import ru.practicum.shareit.exception.user.UserNotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.exception.EmailAlreadyExistException;
-import ru.practicum.shareit.user.exception.UserNotFoundException;
+import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private long id = 0;
 
     @Override
-    public User create(User user) {
+    public User save(User user) {
         if (isEmailExist(user.getEmail()))
             throw new EmailAlreadyExistException("Email: " + user.getEmail() + " already exist");
-        user.setId(generateId());
-        return userRepository.create(user);
+        return userRepository.save(user);
     }
 
     @Override
-    public User getById(long userId) {
-        return userRepository.getById(userId)
+    public User findById(long userId) {
+        return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found"));
     }
 
     @Override
-    public List<User> getAll() {
-        return userRepository.getAll();
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
     @Override
     public User update(long userId, UserDto userDto) {
-        User user = userRepository.getById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found"));
 
-        if (userDto.getEmail() != null && isEmailExist(userDto.getEmail())) {
-            throw new EmailAlreadyExistException("Email: " + userDto.getEmail() + " already exist");
-        }
-        User updatedUser = updateUserDetails(user, userDto);
-        userRepository.deleteById(userId, user);
+        validateEmail(userDto.getEmail());
 
-        return userRepository.create(updatedUser);
+        updateUserDetails(user, userDto);
+
+        return userRepository.save(user);
     }
 
-    private User updateUserDetails(User user, UserDto userDto) {
-        if (userDto.getName() != null) {
-            user.setName(userDto.getName());
+    private void validateEmail(String email) {
+        if (email != null && isEmailExist(email)) {
+            throw new EmailAlreadyExistException("Email: " + email + " already exist");
         }
-        if (userDto.getEmail() != null) {
-            user.setEmail(userDto.getEmail());
-        }
-        return user;
+    }
+
+    private void updateUserDetails(User user, UserDto userDto) {
+        Optional.ofNullable(userDto.getName()).ifPresent(user::setName);
+        Optional.ofNullable(userDto.getEmail()).ifPresent(user::setEmail);
     }
 
     @Override
     public void deleteById(long userId) {
-        User user = userRepository.getById(userId)
+        userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found"));
-        userRepository.deleteById(userId, user);
+        userRepository.deleteById(userId);
     }
 
     private boolean isEmailExist(String email) {
-        return userRepository.getEmails().contains(email);
-    }
-
-    private long generateId() {
-        return ++id;
+        return userRepository.findDistinctEmails().contains(email);
     }
 }

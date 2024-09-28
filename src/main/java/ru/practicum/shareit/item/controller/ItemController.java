@@ -4,9 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemMapper;
-import ru.practicum.shareit.item.dto.UpdateItemDto;
+import ru.practicum.shareit.item.dto.*;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 
@@ -21,45 +20,51 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping
-    public Item create(@RequestBody @Valid ItemDto itemDto,
-                       @RequestHeader(X_SHARER_USER_ID) long userId) {
-        log.info("ItemController: create is called");
-        Item item = itemService.create(itemDto, userId);
-        log.info("ItemController: item created successfully");
+    public Item save(@RequestBody @Valid ItemDto itemDto, @RequestHeader(X_SHARER_USER_ID) long userId) {
+        log.info("ItemController: create is called with userId = {}, itemDto = {}", userId, itemDto);
+        Item item = itemService.save(itemDto, userId);
+        log.info("ItemController: item created successfully with itemId = {}", item.getId());
         return item;
     }
 
     @PatchMapping("{itemId}")
-    public Item update(@PathVariable long itemId,
-                       @RequestBody UpdateItemDto itemDto,
-                       @RequestHeader(X_SHARER_USER_ID) long userId) {
-        log.info("ItemController: update is called");
+    public Item update(@PathVariable long itemId, @RequestBody UpdateItemDto itemDto, @RequestHeader(X_SHARER_USER_ID) long userId) {
+        log.info("ItemController: update is called with userId = {}, itemId = {}, update data = {}", userId, itemId, itemDto);
         Item item = itemService.update(itemId, itemDto, userId);
-        log.info("ItemController: item updated successfully");
+        log.info("ItemController: item updated successfully for itemId = {}", itemId);
         return item;
     }
 
     @GetMapping("{itemId}")
-    public ItemDto getById(@PathVariable long itemId) {
-        log.info("ItemController: getById is called");
-        ItemDto itemDto = ItemMapper.itemToDto(itemService.getById(itemId));
-        log.info("ItemController: item received successfully");
+    public ItemWithCommentsDto findById(@PathVariable long itemId) {
+        log.info("ItemController: findById is called for itemId = {}", itemId);
+        ItemWithCommentsDto itemDto = itemService.findById(itemId);
+        log.info("ItemController: item received successfully for itemId = {}", itemId);
         return itemDto;
     }
 
     @GetMapping
-    public List<ItemDto> allItemsFromUser(@RequestHeader(X_SHARER_USER_ID) long userId) {
-        log.info("ItemController: allItemsFromUser is called");
-        List<ItemDto> items = itemService.allItemsFromUser(userId);
-        log.info("ItemController: all items from user successfully received");
+    public List<ItemWithBookingDateDto> allItemsFromUser(@RequestHeader(X_SHARER_USER_ID) long userId) {
+        log.info("ItemController: allItemsFromUser is called for userId = {}", userId);
+        List<ItemWithBookingDateDto> items = itemService.allItemsFromUser(userId);
+        log.info("ItemController: all items from userId = {} successfully received, total items = {}", userId, items.size());
         return items;
     }
 
     @GetMapping("search")
     public List<ItemDto> search(@RequestParam String text) {
-        log.info("ItemController: search is called");
+        log.info("ItemController: search is called with text = {}", text);
         List<ItemDto> items = itemService.search(text);
-        log.info("ItemController: search is successfully");
+        log.info("ItemController: search completed successfully, found items = {}", items.size());
         return items;
     }
+
+    @PostMapping("{itemId}/comment")
+    public CommentDto saveComment(@RequestHeader(X_SHARER_USER_ID) long userId, @PathVariable long itemId, @RequestBody Comment comment) {
+        log.info("ItemController: saveComment is called with userId = {}, itemId = {}, comment = {}", userId, itemId, comment);
+        CommentDto savedComment = itemService.saveComment(comment, itemId, userId);
+        log.info("ItemController: comment saved successfully with commentId = {}", savedComment.getId());
+        return savedComment;
+    }
+
 }

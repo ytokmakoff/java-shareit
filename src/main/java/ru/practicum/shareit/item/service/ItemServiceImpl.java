@@ -2,78 +2,102 @@ package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemMapper;
-import ru.practicum.shareit.item.dto.UpdateItemDto;
-import ru.practicum.shareit.item.exception.AccessDeniedException;
-import ru.practicum.shareit.item.exception.ItemNotFoundException;
+import ru.practicum.shareit.booking.repository.BookingRepository;
+import ru.practicum.shareit.exception.item.ItemAccessDeniedException;
+import ru.practicum.shareit.exception.item.ItemNotFoundException;
+import ru.practicum.shareit.exception.item.ItemUnavailableException;
+import ru.practicum.shareit.item.dto.*;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
     private final UserService userService;
     private final ItemRepository itemRepository;
-    private long id = 0;
+    private final CommentRepository commentRepository;
+    private final BookingRepository bookingRepository;
 
     @Override
-    public Item create(ItemDto itemDto, long userId) {
-        User user = userService.getById(userId);
+    public Item save(ItemDto itemDto, long userId) {
+        User user = userService.findById(userId);
 
         Item item = ItemMapper.dtoToItem(itemDto);
-        item.setId(generateId());
         item.setOwner(user);
 
-        itemRepository.create(item);
-        return item;
+        return itemRepository.save(item);
     }
 
     @Override
     public Item update(long itemId, UpdateItemDto itemDto, long userId) {
-        Item item = itemRepository.getById(itemId)
+        Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new ItemNotFoundException("Item with id " + itemId + " not found"));
+
         if (item.getOwner().getId() != userId) {
-            throw new AccessDeniedException("Access denied you didn't create this item");
+            throw new ItemAccessDeniedException("Access denied you didn't create this item");
         }
+
         updateItemDetails(item, itemDto);
-        return itemRepository.update(itemId, item);
+
+        return itemRepository.save(item);
     }
 
     private void updateItemDetails(Item item, UpdateItemDto itemDto) {
-        if (itemDto.getName() != null) {
-            item.setName(itemDto.getName());
-        }
-        if (itemDto.getDescription() != null) {
-            item.setDescription(itemDto.getDescription());
-        }
-        if (itemDto.getAvailable() != null) {
-            item.setAvailable(itemDto.getAvailable());
-        }
+        Optional.ofNullable(itemDto.getName()).ifPresent(item::setName);
+        Optional.ofNullable(itemDto.getDescription()).ifPresent(item::setDescription);
+        Optional.ofNullable(itemDto.getAvailable()).ifPresent(item::setAvailable);
     }
 
     @Override
-    public Item getById(long itemId) {
-        return itemRepository.getById(itemId)
+    public ItemWithCommentsDto findById(long itemId) {
+        ItemWithCommentsDto itemWithCommentsDto = itemRepository.findWithCommentsById(itemId)
                 .orElseThrow(() -> new ItemNotFoundException("Item with id " + itemId + " not found"));
+
+        itemWithCommentsDto.setComments(commentRepository.findByItemId(itemId));
+
+        return itemWithCommentsDto;
     }
 
     @Override
-    public List<ItemDto> allItemsFromUser(long userId) {
-        userService.getById(userId);
+    public List<ItemWithBookingDateDto> allItemsFromUser(long userId) {
+        userService.findById(userId);
         return itemRepository.allItemsFromUser(userId);
     }
 
     @Override
     public List<ItemDto> search(String text) {
-        return itemRepository.search(text);
+        if (text.isBlank()) {
+            return List.of();
+        }
+
+        return itemRepository.search(text.toLowerCase());
     }
 
-    private long generateId() {
-        return ++id;
+    @Override
+    public CommentDto saveComment(Comment comment, long itemId, long userId) {
+        User user = userService.findById(userId);
+        Item item = itemRepository.findById(itemId).orElseThrow(
+                () -> new ItemNotFoundException("Item with id " + itemId + " not found"));
+
+        verifyBookingExists(itemId, userId);
+
+        comment.setUser(user);
+        comment.setItem(item);
+        comment.setCreated(LocalDate.now());
+
+        return CommentMapper.toCommentDto(commentRepository.save(comment));
+    }
+
+    private void verifyBookingExists(long itemId, long userId) {
+        bookingRepository.findByItemIdAndBookerIdAndEndBeforeNow(itemId, userId)
+                .orElseThrow(() -> new ItemUnavailableException("Access denied: you didn't create a booking for this item"));
     }
 }
