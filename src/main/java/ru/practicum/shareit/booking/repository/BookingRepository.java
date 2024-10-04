@@ -11,7 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
-
     @Query("SELECT b " +
            "FROM Booking b JOIN b.booker u " +
            "WHERE u.id = ?1 " +
@@ -47,7 +46,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
            "WHERE u.id = ?1 AND b.status = 'REJECTED' " +
            "ORDER BY b.start DESC")
     List<Booking> findRejectedByUserId(long userId);
-
 
     @Query("SELECT b " +
            "FROM Booking b " +
