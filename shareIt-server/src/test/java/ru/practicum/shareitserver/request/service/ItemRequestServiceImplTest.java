@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-@TestPropertySource(properties = { "jdbc.url=jdbc:postgresql://localhost:5432/test"})
+@TestPropertySource(properties = {"jdbc.url=jdbc:postgresql://localhost:5432/test"})
 class ItemRequestServiceImplTest {
 
     User booker;

@@ -26,7 +26,7 @@ import static org.hamcrest.Matchers.notNullValue;
 
 @SpringBootTest
 @Transactional
-@TestPropertySource(properties = { "jdbc.url=jdbc:postgresql://localhost:5432/test"})
+@TestPropertySource(properties = {"jdbc.url=jdbc:postgresql://localhost:5432/test"})
 public class UserServiceImplTest {
 
     @Autowired
