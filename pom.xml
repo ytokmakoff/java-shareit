@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>ru.practicum</groupId>
-    <artifactId>shareit</artifactId>
+    <artifactId>java-shareit</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <name>ShareIt</name>
