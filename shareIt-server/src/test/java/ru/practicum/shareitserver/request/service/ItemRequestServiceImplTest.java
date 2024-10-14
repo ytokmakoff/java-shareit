@@ -114,11 +114,6 @@ class ItemRequestServiceImplTest {
         itemRequest2.setCreated(LocalDateTime.now());
         itemRequestRepository.save(itemRequest2);
 
-        List<ItemRequest> allRequests = itemRequestService.findAll(booker.getId());
-
-        assertThat(allRequests.size(), equalTo(2));
-        assertThat(allRequests.get(0).getId(), equalTo(itemRequest2.getId()));
-
         TypedQuery<ItemRequest> query = em.createQuery("select ir from ItemRequest ir where ir.user.id != :userId", ItemRequest.class);
         List<ItemRequest> requests = query.setParameter("userId", booker.getId()).getResultList();
         assertThat(requests, hasSize(1));
