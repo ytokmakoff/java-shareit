@@ -1,6 +1,5 @@
 package ru.practicum.shareitgateway.client;
 
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,6 +11,17 @@ import org.springframework.web.client.RestTemplate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpStatusCodeException;
+import ru.practicum.shareitgateway.booking.BookingClient;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class BaseClientTest {
 
@@ -27,62 +37,192 @@ public class BaseClientTest {
     }
 
     @Test
-    void get_shouldCallRestTemplateGet() {
+    void get_withPathOnly_shouldCallGetMethod() {
         String path = "/test";
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().body("response");
+        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
 
         when(restTemplate.exchange(eq(path), eq(HttpMethod.GET), any(HttpEntity.class), eq(Object.class)))
                 .thenReturn(expectedResponse);
 
-        ResponseEntity<Object> actualResponse = baseClient.get(path);
+        ResponseEntity<Object> response = baseClient.get(path);
 
-        assertEquals(expectedResponse, actualResponse);
+        assertNotNull(response);
+        assertEquals(expectedResponse, response);
         verify(restTemplate).exchange(eq(path), eq(HttpMethod.GET), any(HttpEntity.class), eq(Object.class));
     }
 
     @Test
-    void post_shouldCallRestTemplatePost() {
+    void get_withPathAndUserId_shouldCallGetMethod() {
         String path = "/test";
-        String body = "request body";
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().body("response");
+        long userId = 1L;
+        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
 
+        // Настройка поведения RestTemplate
+        when(restTemplate.exchange(eq(path), eq(HttpMethod.GET), any(HttpEntity.class), eq(Object.class)))
+                .thenReturn(expectedResponse);
+
+        // Вызов метода
+        ResponseEntity<Object> response = baseClient.get(path, userId);
+
+        // Проверка
+        assertNotNull(response);
+        assertEquals(expectedResponse, response);
+        verify(restTemplate).exchange(eq(path), eq(HttpMethod.GET), any(HttpEntity.class), eq(Object.class));
+    }
+
+    @Test
+    void get_withPathUserIdAndParameters_shouldCallGetMethod() {
+        String path = "/test";
+        long userId = 1L;
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("param", "value");
+        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+
+        // Настройка поведения RestTemplate
+        when(restTemplate.exchange(eq(path), eq(HttpMethod.GET), any(HttpEntity.class), eq(Object.class), eq(parameters)))
+                .thenReturn(expectedResponse);
+
+        // Вызов метода
+        ResponseEntity<Object> response = baseClient.get(path, userId, parameters);
+
+        // Проверка
+        assertNotNull(response);
+        assertEquals(expectedResponse, response);
+        verify(restTemplate).exchange(eq(path), eq(HttpMethod.GET), any(HttpEntity.class), eq(Object.class), eq(parameters));
+    }
+
+    @Test
+    void post_withPathOnly_shouldCallPostMethod() {
+        String path = "/test";
+        Object requestBody = new Object();
+        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+
+        // Настройка поведения RestTemplate
         when(restTemplate.exchange(eq(path), eq(HttpMethod.POST), any(HttpEntity.class), eq(Object.class)))
                 .thenReturn(expectedResponse);
 
-        ResponseEntity<Object> actualResponse = baseClient.post(path, body);
+        // Вызов метода
+        ResponseEntity<Object> response = baseClient.post(path, requestBody);
 
-        assertEquals(expectedResponse, actualResponse);
+        // Проверка
+        assertNotNull(response);
+        assertEquals(expectedResponse, response);
         verify(restTemplate).exchange(eq(path), eq(HttpMethod.POST), any(HttpEntity.class), eq(Object.class));
     }
 
     @Test
-    void put_shouldCallRestTemplatePut() {
+    void post_withPathAndUserId_shouldCallPostMethod() {
         String path = "/test";
-        String body = "request body";
         long userId = 1L;
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().body("response");
+        Object requestBody = new Object();
+        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
 
+        // Настройка поведения RestTemplate
+        when(restTemplate.exchange(eq(path), eq(HttpMethod.POST), any(HttpEntity.class), eq(Object.class)))
+                .thenReturn(expectedResponse);
+
+        // Вызов метода
+        ResponseEntity<Object> response = baseClient.post(path, userId, requestBody);
+
+        // Проверка
+        assertNotNull(response);
+        assertEquals(expectedResponse, response);
+        verify(restTemplate).exchange(eq(path), eq(HttpMethod.POST), any(HttpEntity.class), eq(Object.class));
+    }
+
+    @Test
+    void put_withPathAndUserId_shouldCallPutMethod() {
+        String path = "/test";
+        long userId = 1L;
+        Object requestBody = new Object();
+        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+
+        // Настройка поведения RestTemplate
         when(restTemplate.exchange(eq(path), eq(HttpMethod.PUT), any(HttpEntity.class), eq(Object.class)))
                 .thenReturn(expectedResponse);
 
-        ResponseEntity<Object> actualResponse = baseClient.put(path, userId, body);
+        // Вызов метода
+        ResponseEntity<Object> response = baseClient.put(path, userId, requestBody);
 
-        assertEquals(expectedResponse, actualResponse);
+        // Проверка
+        assertNotNull(response);
+        assertEquals(expectedResponse, response);
         verify(restTemplate).exchange(eq(path), eq(HttpMethod.PUT), any(HttpEntity.class), eq(Object.class));
     }
 
     @Test
-    void delete_shouldCallRestTemplateDelete() {
+    void patch_withPathAndUserId_shouldCallPatchMethod() {
         String path = "/test";
         long userId = 1L;
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().body("response");
+        Object requestBody = new Object();
+        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
 
+        // Настройка поведения RestTemplate
+        when(restTemplate.exchange(eq(path), eq(HttpMethod.PATCH), any(HttpEntity.class), eq(Object.class)))
+                .thenReturn(expectedResponse);
+
+        // Вызов метода
+        ResponseEntity<Object> response = baseClient.patch(path, userId, requestBody);
+
+        // Проверка
+        assertNotNull(response);
+        assertEquals(expectedResponse, response);
+        verify(restTemplate).exchange(eq(path), eq(HttpMethod.PATCH), any(HttpEntity.class), eq(Object.class));
+    }
+
+    @Test
+    void delete_withPathOnly_shouldCallDeleteMethod() {
+        String path = "/test";
+        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+
+        // Настройка поведения RestTemplate
         when(restTemplate.exchange(eq(path), eq(HttpMethod.DELETE), any(HttpEntity.class), eq(Object.class)))
                 .thenReturn(expectedResponse);
 
-        ResponseEntity<Object> actualResponse = baseClient.delete(path, userId);
+        // Вызов метода
+        ResponseEntity<Object> response = baseClient.delete(path);
 
-        assertEquals(expectedResponse, actualResponse);
+        // Проверка
+        assertNotNull(response);
+        assertEquals(expectedResponse, response);
         verify(restTemplate).exchange(eq(path), eq(HttpMethod.DELETE), any(HttpEntity.class), eq(Object.class));
     }
+
+    @Test
+    void delete_withPathAndUserId_shouldCallDeleteMethod() {
+        String path = "/test";
+        long userId = 1L;
+        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+
+        // Настройка поведения RestTemplate
+        when(restTemplate.exchange(eq(path), eq(HttpMethod.DELETE), any(HttpEntity.class), eq(Object.class)))
+                .thenReturn(expectedResponse);
+
+        // Вызов метода
+        ResponseEntity<Object> response = baseClient.delete(path, userId);
+
+        // Проверка
+        assertNotNull(response);
+        assertEquals(expectedResponse, response);
+        verify(restTemplate).exchange(eq(path), eq(HttpMethod.DELETE), any(HttpEntity.class), eq(Object.class));
+    }
+
+    @Test
+    void makeAndSendRequest_shouldHandleHttpStatusCodeException() {
+        String path = "/test";
+        long userId = 1L;
+        Object requestBody = new Object();
+
+        // Настройка поведения RestTemplate, чтобы выбрасывать исключение
+        when(restTemplate.exchange(eq(path), eq(HttpMethod.POST), any(HttpEntity.class), eq(Object.class)))
+                .thenThrow(new HttpStatusCodeException(HttpStatus.BAD_REQUEST) {});
+
+        // Вызов метода
+        ResponseEntity<Object> response = baseClient.post(path, userId, requestBody);
+
+        // Проверка, что ответ содержит статус BAD_REQUEST
+        assertNotNull(response);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
 }
+
