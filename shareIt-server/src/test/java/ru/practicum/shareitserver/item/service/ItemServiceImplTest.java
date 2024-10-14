@@ -83,6 +83,7 @@ public class ItemServiceImplTest {
         assertThat(foundItem.getName(), equalTo(updateItemDto.getName()));
         assertThat(foundItem.getDescription(), equalTo(updateItemDto.getDescription()));
     }
+
     @Test
     void testFindById() {
         ItemWithCommentsDto foundItemDto = itemService.findById(availableItem.getId());
@@ -91,12 +92,14 @@ public class ItemServiceImplTest {
         assertThat(foundItemDto.getName(), equalTo(availableItem.getName()));
         assertThat(foundItemDto.getDescription(), equalTo(availableItem.getDescription()));
     }
+
     @Test
     void testAllItemsFromUser() {
         List<ItemWithBookingDateDto> items = itemService.allItemsFromUser(itemOwner.getId());
 
         assertThat(items.get(0).getId(), equalTo(availableItem.getId()));
     }
+
     @Test
     void testSearchItems() {
         List<ItemDto> items = itemService.search("Test");

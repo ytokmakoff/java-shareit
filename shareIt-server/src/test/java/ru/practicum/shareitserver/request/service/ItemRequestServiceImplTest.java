@@ -31,24 +31,19 @@ import static org.junit.jupiter.api.Assertions.*;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class ItemRequestServiceImplTest {
 
-    @Autowired
-    private ItemRequestService itemRequestService;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ItemRequestRepository itemRequestRepository;
-
-    @Autowired
-    private ItemRepository itemRepository;
-
-    @Autowired
-    private EntityManager em;
-
     User booker;
     User itemOwner;
     Item availableItem;
+    @Autowired
+    private ItemRequestService itemRequestService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ItemRequestRepository itemRequestRepository;
+    @Autowired
+    private ItemRepository itemRepository;
+    @Autowired
+    private EntityManager em;
 
     @BeforeEach
     void setUp() {
