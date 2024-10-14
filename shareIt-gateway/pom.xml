@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>shareit-gateway</artifactId>
+    <artifactId>shareIt-gateway</artifactId>
     <name>shareit-gateway</name>
     <description>shareit-gateway</description>
 
