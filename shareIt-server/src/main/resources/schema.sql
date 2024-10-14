@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS bookings
     start_date_time TIMESTAMP,
     end_date_time   TIMESTAMP,
     item            INTEGER,
-    booker          iNTEGER,
+    booker          INTEGER,
     status          VARCHAR(20),
 
     CONSTRAINT fk_item FOREIGN KEY (item) REFERENCES items (id),

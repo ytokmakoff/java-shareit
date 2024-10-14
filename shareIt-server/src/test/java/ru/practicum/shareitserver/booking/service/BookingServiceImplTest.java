@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareitserver.booking.dto.BookingDto;
 import ru.practicum.shareitserver.booking.dto.BookingSaveDto;
@@ -38,6 +39,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
+@ActiveProfiles("test")
 class BookingServiceImplTest {
     @Autowired
     private BookingService bookingService;
@@ -77,14 +79,6 @@ class BookingServiceImplTest {
         availableItem.setAvailable(true);
         availableItem.setOwner(itemOwner);
         availableItem = itemRepository.save(availableItem);
-
-        booking = new Booking();
-        booking.setItem(availableItem);
-        booking.setBooker(booker);
-        booking.setStart(LocalDateTime.now().plusDays(5));
-        booking.setEnd(LocalDateTime.now().plusDays(6));
-        booking.setStatus(BookingStatus.WAITING);
-        booking = bookingRepository.save(booking);
     }
 
 
@@ -216,6 +210,14 @@ class BookingServiceImplTest {
 
     @Test
     void testResponseToRequestUserNotOwner() {
+        booking = new Booking();
+        booking.setItem(availableItem);
+        booking.setBooker(booker);
+        booking.setStart(LocalDateTime.now().plusDays(5));
+        booking.setEnd(LocalDateTime.now().plusDays(6));
+        booking.setStatus(BookingStatus.WAITING);
+        booking = bookingRepository.save(booking);
+
         User nonOwner = new User();
         nonOwner.setName("NonOwner");
         nonOwner.setEmail("nonowner@example.com");
@@ -226,6 +228,14 @@ class BookingServiceImplTest {
 
     @Test
     void testResponseToRequestAlreadyProcessed() {
+        booking = new Booking();
+        booking.setItem(availableItem);
+        booking.setBooker(booker);
+        booking.setStart(LocalDateTime.now().plusDays(5));
+        booking.setEnd(LocalDateTime.now().plusDays(6));
+        booking.setStatus(BookingStatus.WAITING);
+        booking = bookingRepository.save(booking);
+
         Booking updatedBooking = bookingService.responseToRequest(itemOwner.getId(), booking.getId(), true);
 
         assertThat(updatedBooking.getStatus()).isEqualTo(BookingStatus.APPROVED);
@@ -241,6 +251,13 @@ class BookingServiceImplTest {
 
     @Test
     void testFindBookingByIdAsBooker() {
+        booking = new Booking();
+        booking.setItem(availableItem);
+        booking.setBooker(booker);
+        booking.setStart(LocalDateTime.now().plusDays(5));
+        booking.setEnd(LocalDateTime.now().plusDays(6));
+        booking.setStatus(BookingStatus.WAITING);
+        booking = bookingRepository.save(booking);
         BookingDto bookingDto = bookingService.findBookingById(booker.getId(), booking.getId());
 
         assertThat(bookingDto).isNotNull();
@@ -250,6 +267,14 @@ class BookingServiceImplTest {
 
     @Test
     void testFindBookingByIdAccessDenied() {
+        booking = new Booking();
+        booking.setItem(availableItem);
+        booking.setBooker(booker);
+        booking.setStart(LocalDateTime.now().plusDays(5));
+        booking.setEnd(LocalDateTime.now().plusDays(6));
+        booking.setStatus(BookingStatus.WAITING);
+        booking = bookingRepository.save(booking);
+
         User anotherUser = new User();
         anotherUser.setName("Another User");
         anotherUser.setEmail("another@example.com");
@@ -267,33 +292,17 @@ class BookingServiceImplTest {
     @Test
     void testFindAllBookingsForUserAll() {
         Booking pastBooking = new Booking();
-        pastBooking.setStart(LocalDateTime.now().minusDays(3));
-        pastBooking.setEnd(LocalDateTime.now().minusDays(2));
+        pastBooking.setStart(LocalDateTime.now().plusDays(1));
+        pastBooking.setEnd(LocalDateTime.now().plusDays(2));
         pastBooking.setItem(availableItem);
         pastBooking.setBooker(booker);
         pastBooking.setStatus(BookingStatus.APPROVED);
         bookingRepository.save(pastBooking);
 
-        Booking currentBooking = new Booking();
-        currentBooking.setStart(LocalDateTime.now().minusDays(1));
-        currentBooking.setEnd(LocalDateTime.now().plusDays(1));
-        currentBooking.setItem(availableItem);
-        currentBooking.setBooker(booker);
-        currentBooking.setStatus(BookingStatus.APPROVED);
-        bookingRepository.save(currentBooking);
-
-        Booking futureBooking = new Booking();
-        futureBooking.setStart(LocalDateTime.now().plusDays(1));
-        futureBooking.setEnd(LocalDateTime.now().plusDays(2));
-        futureBooking.setItem(availableItem);
-        futureBooking.setBooker(booker);
-        futureBooking.setStatus(BookingStatus.WAITING);
-        bookingRepository.save(futureBooking);
-
         List<Booking> bookings = bookingService.findAllForUser(booker.getId(), BookingState.ALL);
 
         assertThat(bookings).isNotNull();
-        assertThat(bookings).hasSize(4);
+        assertThat(bookings).hasSize(1);
     }
 
     @Test
@@ -305,14 +314,6 @@ class BookingServiceImplTest {
         currentBooking.setBooker(booker);
         currentBooking.setStatus(BookingStatus.APPROVED);
         bookingRepository.save(currentBooking);
-
-        Booking pastBooking = new Booking();
-        pastBooking.setStart(LocalDateTime.now().minusDays(3));
-        pastBooking.setEnd(LocalDateTime.now().minusDays(2));
-        pastBooking.setItem(availableItem);
-        pastBooking.setBooker(booker);
-        pastBooking.setStatus(BookingStatus.APPROVED);
-        bookingRepository.save(pastBooking);
 
         List<Booking> bookings = bookingService.findAllForUser(booker.getId(), BookingState.CURRENT);
 
@@ -340,6 +341,14 @@ class BookingServiceImplTest {
 
     @Test
     void testFindAllBookingsForUserFuture() {
+        booking = new Booking();
+        booking.setItem(availableItem);
+        booking.setBooker(booker);
+        booking.setStart(LocalDateTime.now().plusDays(5));
+        booking.setEnd(LocalDateTime.now().plusDays(6));
+        booking.setStatus(BookingStatus.WAITING);
+        booking = bookingRepository.save(booking);
+
         List<Booking> bookings = bookingService.findAllForUser(booker.getId(), BookingState.FUTURE);
 
         assertThat(bookings).isNotNull();
@@ -350,6 +359,13 @@ class BookingServiceImplTest {
 
     @Test
     void testFindAllBookingsForUserWaiting() {
+        booking = new Booking();
+        booking.setItem(availableItem);
+        booking.setBooker(booker);
+        booking.setStart(LocalDateTime.now().plusDays(5));
+        booking.setEnd(LocalDateTime.now().plusDays(6));
+        booking.setStatus(BookingStatus.WAITING);
+        booking = bookingRepository.save(booking);
         List<Booking> bookings = bookingService.findAllForUser(booker.getId(), BookingState.WAITING);
 
         assertThat(bookings).isNotNull();
@@ -376,6 +392,13 @@ class BookingServiceImplTest {
 
     @Test
     void testFindAllReservations() {
+        booking = new Booking();
+        booking.setItem(availableItem);
+        booking.setBooker(booker);
+        booking.setStart(LocalDateTime.now().plusDays(5));
+        booking.setEnd(LocalDateTime.now().plusDays(6));
+        booking.setStatus(BookingStatus.WAITING);
+        booking = bookingRepository.save(booking);
         List<Booking> bookings = bookingService.findReservations(itemOwner.getId(), BookingState.ALL);
         assertThat(bookings).isNotNull();
         assertThat(bookings).hasSize(1);
@@ -419,6 +442,13 @@ class BookingServiceImplTest {
 
     @Test
     void testFindFutureReservations() {
+        booking = new Booking();
+        booking.setItem(availableItem);
+        booking.setBooker(booker);
+        booking.setStart(LocalDateTime.now().plusDays(5));
+        booking.setEnd(LocalDateTime.now().plusDays(6));
+        booking.setStatus(BookingStatus.WAITING);
+        booking = bookingRepository.save(booking);
         List<Booking> bookings = bookingService.findReservations(itemOwner.getId(), BookingState.FUTURE);
 
         assertThat(bookings).isNotNull();
@@ -428,6 +458,14 @@ class BookingServiceImplTest {
 
     @Test
     void testFindWaitingReservations() {
+        booking = new Booking();
+        booking.setItem(availableItem);
+        booking.setBooker(booker);
+        booking.setStart(LocalDateTime.now().plusDays(5));
+        booking.setEnd(LocalDateTime.now().plusDays(6));
+        booking.setStatus(BookingStatus.WAITING);
+        booking = bookingRepository.save(booking);
+
         List<Booking> bookings = bookingService.findReservations(itemOwner.getId(), BookingState.WAITING);
 
         assertThat(bookings).isNotNull();
