@@ -29,19 +29,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 class BookingControllerTest {
 
-    private final ObjectMapper mapper = new ObjectMapper()
-            .registerModule(new JavaTimeModule())
-            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
-    @Autowired
-    private MockMvc mvc;
-
-    @MockBean
-    private BookingClient bookingClient;
-
     private static final String X_SHARER_USER_ID = "X-Sharer-User-Id";
     private static final Long USER_ID = 1L;
     private static final Long BOOKING_ID = 1L;
+    private final ObjectMapper mapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    @Autowired
+    private MockMvc mvc;
+    @MockBean
+    private BookingClient bookingClient;
 
     @Test
     void save_ShouldReturnOk() throws Exception {

@@ -215,7 +215,8 @@ public class BaseClientTest {
 
         // Настройка поведения RestTemplate, чтобы выбрасывать исключение
         when(restTemplate.exchange(eq(path), eq(HttpMethod.POST), any(HttpEntity.class), eq(Object.class)))
-                .thenThrow(new HttpStatusCodeException(HttpStatus.BAD_REQUEST) {});
+                .thenThrow(new HttpStatusCodeException(HttpStatus.BAD_REQUEST) {
+                });
 
         // Вызов метода
         ResponseEntity<Object> response = baseClient.post(path, userId, requestBody);

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class  BookingSaveDto {
+public class BookingSaveDto {
     private long itemId;
     @FutureOrPresent
     private LocalDateTime start;
