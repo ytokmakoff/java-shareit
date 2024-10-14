@@ -8,6 +8,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareitserver.exception.user.EmailAlreadyExistException;
 import ru.practicum.shareitserver.exception.user.UserNotFoundException;
@@ -24,6 +25,7 @@ import static org.hamcrest.Matchers.notNullValue;
 
 @SpringBootTest
 @Transactional
+@ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class UserServiceImplTest {
 
