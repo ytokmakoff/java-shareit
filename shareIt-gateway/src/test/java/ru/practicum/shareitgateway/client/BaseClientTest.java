@@ -16,7 +16,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpStatusCodeException;
-import ru.practicum.shareitgateway.booking.BookingClient;
 
 import java.util.HashMap;
 import java.util.Map;
