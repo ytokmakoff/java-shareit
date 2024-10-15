@@ -13,11 +13,9 @@
     <artifactId>java-shareit</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>ShareIt</name>
-
     <modules>
         <module>shareIt-gateway</module>
-        <module>shareIt-server</module>
+         <module>shareIt-gateway</module>
     </modules>
 
     <packaging>pom</packaging>
