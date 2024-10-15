@@ -14,8 +14,8 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <modules>
-         <module>shareIt-gateway</module>
-        <module>shareIt-server</module>
+         <module>gateway</module>
+        <module>server</module>
     </modules>
 
     <packaging>pom</packaging>
