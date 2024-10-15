@@ -9,9 +9,9 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>server</artifactId>
-    <name>server</name>
-    <description>server</description>
+    <artifactId>shareIt-server</artifactId>
+    <name>shareIt-server</name>
+    <description>shareIt-server</description>
 
     <url/>
     <licenses>
