@@ -224,5 +224,71 @@ public class BaseClientTest {
         assertNotNull(response);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
+
+    @Test
+    void testPatchWithBody() {
+        String path = "/test";
+        String body = "{\"key\": \"value\"}";
+
+        ResponseEntity<Object> mockResponse = new ResponseEntity<>(HttpStatus.OK);
+        when(restTemplate.exchange(eq(path), eq(HttpMethod.PATCH), any(HttpEntity.class), eq(Object.class)))
+                .thenReturn(mockResponse);
+
+        ResponseEntity<Object> response = baseClient.patch(path, body);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        verify(restTemplate, times(1)).exchange(eq(path), eq(HttpMethod.PATCH), any(HttpEntity.class), eq(Object.class));
+    }
+
+    @Test
+    void testPatchWithUserId() {
+        String path = "/test";
+        long userId = 1L;
+
+        ResponseEntity<Object> mockResponse = new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        when(restTemplate.exchange(eq(path), eq(HttpMethod.PATCH), any(HttpEntity.class), eq(Object.class)))
+                .thenReturn(mockResponse);
+
+        ResponseEntity<Object> response = baseClient.patch(path, userId);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        verify(restTemplate, times(1)).exchange(eq(path), eq(HttpMethod.PATCH), any(HttpEntity.class), eq(Object.class));
+    }
+
+    @Test
+    void testPatchBadRequest() {
+        String path = "/test";
+        String body = "{\"key\": \"value\"}";
+
+        // Имитируем ответ с кодом 400 BAD_REQUEST
+        ResponseEntity<Object> mockResponse = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        when(restTemplate.exchange(eq(path), eq(HttpMethod.PATCH), any(HttpEntity.class), eq(Object.class)))
+                .thenReturn(mockResponse);
+
+        ResponseEntity<Object> response = baseClient.patch(path, body);
+
+        // Проверяем, что статус ответа равен 400 BAD_REQUEST
+        assertNotNull(response);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    void testPatchWithBodyBadRequest() {
+        String path = "/test";
+        String body = "{\"key\": \"value\"}";
+
+        String errorMessage = "Error occurred";
+        ResponseEntity<Object> mockResponse = new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+        when(restTemplate.exchange(eq(path), eq(HttpMethod.PATCH), any(HttpEntity.class), eq(Object.class)))
+                .thenReturn(mockResponse);
+
+        ResponseEntity<Object> response = baseClient.patch(path, body);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(errorMessage, response.getBody());
+    }
 }
 
