@@ -9,9 +9,9 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>shareIt-gateway</artifactId>
-    <name>shareIt-gateway</name>
-    <description>shareIt-gateway</description>
+    <artifactId>gateway</artifactId>
+    <name>gateway</name>
+    <description>gateway</description>
 
     <url/>
     <licenses>
