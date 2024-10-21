@@ -19,14 +19,14 @@ public class ItemController {
     private final ItemClient itemClient;
 
     @PostMapping
-    public ResponseEntity<Item> save(@RequestBody @Valid ItemDto itemDto,
+    public ResponseEntity<Object> save(@RequestBody @Valid ItemDto itemDto,
                                      @RequestHeader(X_SHARER_USER_ID) long userId) {
         log.info("save item {}, userId={}", itemDto, userId);
         return itemClient.save(itemDto, userId);
     }
 
     @PatchMapping("{itemId}")
-    public ResponseEntity<Item> update(@PathVariable long itemId,
+    public ResponseEntity<Object> update(@PathVariable long itemId,
                                        @RequestBody UpdateItemDto itemDto,
                                        @RequestHeader(X_SHARER_USER_ID) long userId) {
         log.info("update item {} itemId={} userId={}", itemDto, itemId, userId);
@@ -34,25 +34,25 @@ public class ItemController {
     }
 
     @GetMapping("{itemId}")
-    public ResponseEntity<ItemWithCommentsDto> findById(@PathVariable long itemId) {
+    public ResponseEntity<Object> findById(@PathVariable long itemId) {
         log.info("findById itemId={}", itemId);
         return itemClient.findById(itemId);
     }
 
     @GetMapping
-    public ResponseEntity<ItemWithBookingDateDto> allItemsFromUser(@RequestHeader(X_SHARER_USER_ID) long userId) {
+    public ResponseEntity<Object> allItemsFromUser(@RequestHeader(X_SHARER_USER_ID) long userId) {
         log.info("allItemsFromUser userId={}", userId);
         return itemClient.allItemsFromUser(userId);
     }
 
     @GetMapping("search")
-    public ResponseEntity<ItemDto> search(@RequestParam String text) {
+    public ResponseEntity<Object> search(@RequestParam String text) {
         log.info("search text={}", text);
         return itemClient.search(text);
     }
 
     @PostMapping("{itemId}/comment")
-    public ResponseEntity<CommentDto> saveComment(@RequestHeader(X_SHARER_USER_ID) long userId,
+    public ResponseEntity<Object> saveComment(@RequestHeader(X_SHARER_USER_ID) long userId,
                                                   @PathVariable long itemId,
                                                   @RequestBody @Valid Comment comment) {
         log.info("saveComment {} itemId={} userId={}", comment, itemId, userId);

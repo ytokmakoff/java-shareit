@@ -12,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
-import ru.practicum.shareitgateway.booking.dto.Booking;
-import ru.practicum.shareitgateway.booking.dto.BookingDto;
 import ru.practicum.shareitgateway.booking.dto.BookingSaveDto;
 import ru.practicum.shareitgateway.booking.dto.BookingState;
 
@@ -56,7 +54,7 @@ class BookingClientTest {
         when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(Object.class)))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<Booking> response = bookingClient.save(userId, bookingSaveDto);
+        ResponseEntity<Object> response = bookingClient.save(userId, bookingSaveDto);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -73,7 +71,7 @@ class BookingClientTest {
         when(restTemplate.exchange(anyString(), eq(HttpMethod.PATCH), any(HttpEntity.class), eq(Object.class), anyMap()))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<Booking> response = bookingClient.responseToRequest(userId, bookingId, approved);
+        ResponseEntity<Object> response = bookingClient.responseToRequest(userId, bookingId, approved);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -89,7 +87,7 @@ class BookingClientTest {
         when(restTemplate.exchange(eq("/" + bookingId), eq(HttpMethod.GET), any(HttpEntity.class), eq(Object.class)))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<BookingDto> response = bookingClient.findBookingById(userId, bookingId);
+        ResponseEntity<Object> response = bookingClient.findBookingById(userId, bookingId);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -105,7 +103,7 @@ class BookingClientTest {
         when(restTemplate.exchange(eq("?state={state}"), eq(HttpMethod.GET), any(HttpEntity.class), eq(Object.class), anyMap()))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<Booking> response = bookingClient.findAllForUser(userId, state);
+        ResponseEntity<Object> response = bookingClient.findAllForUser(userId, state);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -121,8 +119,8 @@ class BookingClientTest {
         when(restTemplate.exchange(eq("/owner?state={state}"), eq(HttpMethod.GET), any(HttpEntity.class), eq(Object.class), anyMap()))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<Booking> response = bookingClient.findReservations(userId, state);
 
+        ResponseEntity<Object> response = bookingClient.findReservations(userId, state);
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         verify(restTemplate).exchange(eq("/owner?state={state}"), eq(HttpMethod.GET), any(HttpEntity.class), eq(Object.class), anyMap());

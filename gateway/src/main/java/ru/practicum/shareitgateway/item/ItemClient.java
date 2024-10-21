@@ -26,42 +26,30 @@ public class ItemClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Item> save(ItemDto itemDto, long userId) {
-        ResponseEntity<Object> response = post("", userId, itemDto);
-        Item item = (Item) response.getBody();
-        return new ResponseEntity<>(item, response.getStatusCode());
+    public ResponseEntity<Object> save(ItemDto itemDto, long userId) {
+        return post("", userId, itemDto);
     }
 
-    public ResponseEntity<Item> update(long itemId, UpdateItemDto itemDto, long userId) {
-        ResponseEntity<Object> response = patch("/" + itemId, userId, itemDto);
-        Item item = (Item) response.getBody();
-        return new ResponseEntity<>(item, response.getStatusCode());
+    public ResponseEntity<Object> update(long itemId, UpdateItemDto itemDto, long userId) {
+        return patch("/" + itemId, userId, itemDto);
     }
 
-    public ResponseEntity<ItemWithCommentsDto> findById(long itemId) {
-        ResponseEntity<Object> response = get("/" + itemId);
-        ItemWithCommentsDto itemWithCommentsDto = (ItemWithCommentsDto) response.getBody();
-        return new ResponseEntity<>(itemWithCommentsDto, response.getStatusCode());
+    public ResponseEntity<Object> findById(long itemId) {
+        return get("/" + itemId);
     }
 
-    public ResponseEntity<ItemWithBookingDateDto> allItemsFromUser(long userId) {
-        ResponseEntity<Object> response = get("", userId);
-        ItemWithBookingDateDto itemWithBookingDateDto = (ItemWithBookingDateDto) response.getBody();
-        return new ResponseEntity<>(itemWithBookingDateDto, response.getStatusCode());
+    public ResponseEntity<Object> allItemsFromUser(long userId) {
+        return get("", userId);
     }
 
-    public ResponseEntity<ItemDto> search(String text) {
+    public ResponseEntity<Object> search(String text) {
         Map<String, Object> params = Map.of(
                 "text", text
         );
-        ResponseEntity<Object> response = get("/search", null, params);
-        ItemDto itemDto = (ItemDto) response.getBody();
-        return new ResponseEntity<>(itemDto, response.getStatusCode());
+        return get("/search", null, params);
     }
 
-    public ResponseEntity<CommentDto> saveComment(long userId, long itemId, Comment comment) {
-        ResponseEntity<Object> response = post("/" + itemId + "/comment", userId, comment);
-        CommentDto commentDto = (CommentDto) response.getBody();
-        return new ResponseEntity<>(commentDto, response.getStatusCode());
+    public ResponseEntity<Object> saveComment(long userId, long itemId, Comment comment) {
+        return post("/" + itemId + "/comment", userId, comment);
     }
 }

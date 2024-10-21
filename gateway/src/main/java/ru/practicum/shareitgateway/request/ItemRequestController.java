@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareitgateway.request.dto.ItemRequest;
-import ru.practicum.shareitgateway.request.dto.ItemRequestDto;
 
 @Slf4j
 @Validated
@@ -19,26 +18,26 @@ public class ItemRequestController {
     private final ItemRequestClient itemRequestClient;
 
     @PostMapping
-    public ResponseEntity<ItemRequest> save(@RequestBody @Valid ItemRequest itemRequest,
-                                            @RequestHeader(X_SHARER_USER_ID) long userId) {
+    public ResponseEntity<Object> save(@RequestBody @Valid ItemRequest itemRequest,
+                                       @RequestHeader(X_SHARER_USER_ID) long userId) {
         log.info("save itemRequest {} userId={}", itemRequest, userId);
         return itemRequestClient.save(itemRequest, userId);
     }
 
     @GetMapping
-    public ResponseEntity<ItemRequestDto> findByUserId(@RequestHeader(X_SHARER_USER_ID) long userId) {
+    public ResponseEntity<Object> findByUserId(@RequestHeader(X_SHARER_USER_ID) long userId) {
         log.info("findByUserId userId={}", userId);
         return itemRequestClient.findByUserId(userId);
     }
 
     @GetMapping("all")
-    public ResponseEntity<ItemRequest> findAll(@RequestHeader(X_SHARER_USER_ID) long userId) {
+    public ResponseEntity<Object> findAll(@RequestHeader(X_SHARER_USER_ID) long userId) {
         log.info("findAll userId={}", userId);
         return itemRequestClient.findAll(userId);
     }
 
     @GetMapping("{requestId}")
-    public ResponseEntity<ItemRequestDto> findById(@PathVariable("requestId") long requestId) {
+    public ResponseEntity<Object> findById(@PathVariable("requestId") long requestId) {
         log.info("findById requestId={}", requestId);
         return itemRequestClient.findById(requestId);
     }

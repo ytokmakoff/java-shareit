@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import ru.practicum.shareitgateway.request.dto.ItemRequest;
-import ru.practicum.shareitgateway.request.dto.ItemRequestDto;
 
 import java.util.function.Supplier;
 
@@ -52,7 +51,7 @@ class ItemRequestClientTest {
         when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(Object.class)))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<ItemRequest> response = itemRequestClient.save(itemRequest, userId);
+        ResponseEntity<Object> response = itemRequestClient.save(itemRequest, userId);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -67,7 +66,7 @@ class ItemRequestClientTest {
         when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), any(HttpEntity.class), eq(Object.class)))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<ItemRequestDto> response = itemRequestClient.findByUserId(userId);
+        ResponseEntity<Object> response = itemRequestClient.findByUserId(userId);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -82,7 +81,7 @@ class ItemRequestClientTest {
         when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), any(HttpEntity.class), eq(Object.class)))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<ItemRequest> response = itemRequestClient.findAll(userId);
+        ResponseEntity<Object> response = itemRequestClient.findAll(userId);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -97,7 +96,7 @@ class ItemRequestClientTest {
         when(restTemplate.exchange(anyString(), eq(HttpMethod.GET), any(HttpEntity.class), eq(Object.class)))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<ItemRequestDto> response = itemRequestClient.findById(requestId);
+        ResponseEntity<Object> response = itemRequestClient.findById(requestId);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());

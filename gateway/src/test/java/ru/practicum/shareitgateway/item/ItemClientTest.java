@@ -51,7 +51,7 @@ class ItemClientTest {
         when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(Object.class)))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<Item> response = itemClient.save(itemDto, userId);
+        ResponseEntity<Object> response = itemClient.save(itemDto, userId);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -68,7 +68,7 @@ class ItemClientTest {
         when(restTemplate.exchange(eq("/" + itemId), eq(HttpMethod.PATCH), any(HttpEntity.class), eq(Object.class)))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<Item> response = itemClient.update(itemId, updateItemDto, userId);
+        ResponseEntity<Object> response = itemClient.update(itemId, updateItemDto, userId);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -83,7 +83,7 @@ class ItemClientTest {
         when(restTemplate.exchange(eq("/" + itemId), eq(HttpMethod.GET), any(HttpEntity.class), eq(Object.class)))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<ItemWithCommentsDto> response = itemClient.findById(itemId);
+        ResponseEntity<Object> response = itemClient.findById(itemId);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -98,7 +98,7 @@ class ItemClientTest {
         when(restTemplate.exchange(eq(""), eq(HttpMethod.GET), any(HttpEntity.class), eq(Object.class)))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<ItemWithBookingDateDto> response = itemClient.allItemsFromUser(userId);
+        ResponseEntity<Object> response = itemClient.allItemsFromUser(userId);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -113,7 +113,7 @@ class ItemClientTest {
         when(restTemplate.exchange(eq("/search"), eq(HttpMethod.GET), any(HttpEntity.class), eq(Object.class), anyMap()))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<ItemDto> response = itemClient.search(searchText);
+        ResponseEntity<Object> response = itemClient.search(searchText);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -130,7 +130,7 @@ class ItemClientTest {
         when(restTemplate.exchange(eq("/" + itemId + "/comment"), eq(HttpMethod.POST), any(HttpEntity.class), eq(Object.class)))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<CommentDto> response = itemClient.saveComment(userId, itemId, comment);
+        ResponseEntity<Object> response = itemClient.saveComment(userId, itemId, comment);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
