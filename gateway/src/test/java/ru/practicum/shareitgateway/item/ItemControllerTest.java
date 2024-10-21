@@ -8,9 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
-import ru.practicum.shareitgateway.item.dto.Comment;
-import ru.practicum.shareitgateway.item.dto.ItemDto;
-import ru.practicum.shareitgateway.item.dto.UpdateItemDto;
+import ru.practicum.shareitgateway.item.dto.*;
 
 import static org.mockito.Mockito.*;
 
@@ -35,11 +33,11 @@ public class ItemControllerTest {
         itemDto.setAvailable(true);
 
         long userId = 1L;
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+        ResponseEntity<Item> expectedResponse = ResponseEntity.ok().build();
 
         when(itemClient.save(itemDto, userId)).thenReturn(expectedResponse);
 
-        ResponseEntity<Object> actualResponse = itemController.save(itemDto, userId);
+        ResponseEntity<Item> actualResponse = itemController.save(itemDto, userId);
 
         assertEquals(expectedResponse, actualResponse);
         verify(itemClient).save(itemDto, userId);
@@ -54,11 +52,11 @@ public class ItemControllerTest {
         updateItemDto.setAvailable(false);
 
         long userId = 1L;
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+        ResponseEntity<Item> expectedResponse = ResponseEntity.ok().build();
 
         when(itemClient.update(itemId, updateItemDto, userId)).thenReturn(expectedResponse);
 
-        ResponseEntity<Object> actualResponse = itemController.update(itemId, updateItemDto, userId);
+        ResponseEntity<Item> actualResponse = itemController.update(itemId, updateItemDto, userId);
 
         assertEquals(expectedResponse, actualResponse);
         verify(itemClient).update(itemId, updateItemDto, userId);
@@ -67,11 +65,11 @@ public class ItemControllerTest {
     @Test
     void findById_shouldCallItemClientFindById() {
         long itemId = 1L;
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+        ResponseEntity<ItemWithCommentsDto> expectedResponse = ResponseEntity.ok().build();
 
         when(itemClient.findById(itemId)).thenReturn(expectedResponse);
 
-        ResponseEntity<Object> actualResponse = itemController.findById(itemId);
+        ResponseEntity<ItemWithCommentsDto> actualResponse = itemController.findById(itemId);
 
         assertEquals(expectedResponse, actualResponse);
         verify(itemClient).findById(itemId);
@@ -80,11 +78,11 @@ public class ItemControllerTest {
     @Test
     void allItemsFromUser_shouldCallItemClientAllItemsFromUser() {
         long userId = 1L;
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+        ResponseEntity<ItemWithBookingDateDto> expectedResponse = ResponseEntity.ok().build();
 
         when(itemClient.allItemsFromUser(userId)).thenReturn(expectedResponse);
 
-        ResponseEntity<Object> actualResponse = itemController.allItemsFromUser(userId);
+        ResponseEntity<ItemWithBookingDateDto> actualResponse = itemController.allItemsFromUser(userId);
 
         assertEquals(expectedResponse, actualResponse);
         verify(itemClient).allItemsFromUser(userId);
@@ -93,11 +91,11 @@ public class ItemControllerTest {
     @Test
     void search_shouldCallItemClientSearch() {
         String text = "search text";
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+        ResponseEntity<ItemDto> expectedResponse = ResponseEntity.ok().build();
 
         when(itemClient.search(text)).thenReturn(expectedResponse);
 
-        ResponseEntity<Object> actualResponse = itemController.search(text);
+        ResponseEntity<ItemDto> actualResponse = itemController.search(text);
 
         assertEquals(expectedResponse, actualResponse);
         verify(itemClient).search(text);
@@ -110,11 +108,11 @@ public class ItemControllerTest {
         Comment comment = new Comment();
         comment.setText("Great item!");
 
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+        ResponseEntity<CommentDto> expectedResponse = ResponseEntity.ok().build();
 
         when(itemClient.saveComment(userId, itemId, comment)).thenReturn(expectedResponse);
 
-        ResponseEntity<Object> actualResponse = itemController.saveComment(userId, itemId, comment);
+        ResponseEntity<CommentDto> actualResponse = itemController.saveComment(userId, itemId, comment);
 
         assertEquals(expectedResponse, actualResponse);
         verify(itemClient).saveComment(userId, itemId, comment);

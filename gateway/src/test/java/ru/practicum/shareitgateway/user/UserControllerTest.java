@@ -30,11 +30,11 @@ public class UserControllerTest {
         User user = new User();
         user.setName("John Doe");
 
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+        ResponseEntity<User> expectedResponse = ResponseEntity.ok().build();
 
         when(userClient.save(user)).thenReturn(expectedResponse);
 
-        ResponseEntity<Object> actualResponse = userController.save(user);
+        ResponseEntity<User> actualResponse = userController.save(user);
 
         assertEquals(expectedResponse, actualResponse);
         verify(userClient).save(user);
@@ -43,11 +43,11 @@ public class UserControllerTest {
     @Test
     void findById_shouldCallUserClientFindById() {
         long userId = 1L;
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+        ResponseEntity<User> expectedResponse = ResponseEntity.ok().build();
 
         when(userClient.findById(userId)).thenReturn(expectedResponse);
 
-        ResponseEntity<Object> actualResponse = userController.findById(userId);
+        ResponseEntity<User> actualResponse = userController.findById(userId);
 
         assertEquals(expectedResponse, actualResponse);
         verify(userClient).findById(userId);
@@ -55,11 +55,11 @@ public class UserControllerTest {
 
     @Test
     void findAll_shouldCallUserClientFindAll() {
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+        ResponseEntity<User> expectedResponse = ResponseEntity.ok().build();
 
         when(userClient.findAll()).thenReturn(expectedResponse);
 
-        ResponseEntity<Object> actualResponse = userController.findAll();
+        ResponseEntity<User> actualResponse = userController.findAll();
 
         assertEquals(expectedResponse, actualResponse);
         verify(userClient).findAll();
@@ -71,11 +71,11 @@ public class UserControllerTest {
         UserDto userDto = new UserDto();
         userDto.setName("Jane Doe");
 
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+        ResponseEntity<User> expectedResponse = ResponseEntity.ok().build();
 
         when(userClient.update(userId, userDto)).thenReturn(expectedResponse);
 
-        ResponseEntity<Object> actualResponse = userController.update(userId, userDto);
+        ResponseEntity<User> actualResponse = userController.update(userId, userDto);
 
         assertEquals(expectedResponse, actualResponse);
         verify(userClient).update(userId, userDto);

@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
+import ru.practicum.shareitgateway.booking.dto.Booking;
+import ru.practicum.shareitgateway.booking.dto.BookingDto;
 import ru.practicum.shareitgateway.booking.dto.BookingSaveDto;
 import ru.practicum.shareitgateway.booking.dto.BookingState;
 
@@ -46,7 +48,7 @@ class BookingClientTest {
     }
 
     @Test
-    void testSave() {
+    void saveBooking_ShouldReturnResponseEntityWithOkStatus() {
         Long userId = 1L;
         BookingSaveDto bookingSaveDto = new BookingSaveDto();
 
@@ -54,7 +56,7 @@ class BookingClientTest {
         when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(Object.class)))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<Object> response = bookingClient.save(userId, bookingSaveDto);
+        ResponseEntity<Booking> response = bookingClient.save(userId, bookingSaveDto);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -62,7 +64,7 @@ class BookingClientTest {
     }
 
     @Test
-    void testResponseToRequest() {
+    void responseToRequest_ShouldReturnResponseEntityWithOkStatus() {
         Long userId = 1L;
         long bookingId = 123L;
         boolean approved = true;
@@ -71,7 +73,7 @@ class BookingClientTest {
         when(restTemplate.exchange(anyString(), eq(HttpMethod.PATCH), any(HttpEntity.class), eq(Object.class), anyMap()))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<Object> response = bookingClient.responseToRequest(userId, bookingId, approved);
+        ResponseEntity<Booking> response = bookingClient.responseToRequest(userId, bookingId, approved);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -79,7 +81,7 @@ class BookingClientTest {
     }
 
     @Test
-    void testFindBookingById() {
+    void findBookingById_ShouldReturnResponseEntityWithOkStatus() {
         Long userId = 1L;
         long bookingId = 123L;
 
@@ -87,7 +89,7 @@ class BookingClientTest {
         when(restTemplate.exchange(eq("/" + bookingId), eq(HttpMethod.GET), any(HttpEntity.class), eq(Object.class)))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<Object> response = bookingClient.findBookingById(userId, bookingId);
+        ResponseEntity<BookingDto> response = bookingClient.findBookingById(userId, bookingId);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -95,7 +97,7 @@ class BookingClientTest {
     }
 
     @Test
-    void testFindAllForUser() {
+    void findAllForUser_ShouldReturnResponseEntityWithOkStatus() {
         Long userId = 1L;
         BookingState state = BookingState.ALL;
 
@@ -103,7 +105,7 @@ class BookingClientTest {
         when(restTemplate.exchange(eq("?state={state}"), eq(HttpMethod.GET), any(HttpEntity.class), eq(Object.class), anyMap()))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<Object> response = bookingClient.findAllForUser(userId, state);
+        ResponseEntity<Booking> response = bookingClient.findAllForUser(userId, state);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -111,7 +113,7 @@ class BookingClientTest {
     }
 
     @Test
-    void testFindReservations() {
+    void findReservations_ShouldReturnResponseEntityWithOkStatus() {
         Long userId = 1L;
         BookingState state = BookingState.ALL;
 
@@ -119,7 +121,7 @@ class BookingClientTest {
         when(restTemplate.exchange(eq("/owner?state={state}"), eq(HttpMethod.GET), any(HttpEntity.class), eq(Object.class), anyMap()))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<Object> response = bookingClient.findReservations(userId, state);
+        ResponseEntity<Booking> response = bookingClient.findReservations(userId, state);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());

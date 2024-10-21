@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
+import ru.practicum.shareitgateway.booking.dto.Booking;
+import ru.practicum.shareitgateway.booking.dto.BookingDto;
 import ru.practicum.shareitgateway.booking.dto.BookingSaveDto;
 import ru.practicum.shareitgateway.booking.dto.BookingState;
 import ru.practicum.shareitgateway.client.BaseClient;
@@ -27,34 +29,54 @@ public class BookingClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> save(Long userId, BookingSaveDto bookingSaveDto) {
-        return post("", userId, bookingSaveDto);
+    public ResponseEntity<Booking> save(Long userId, BookingSaveDto bookingSaveDto) {
+        ResponseEntity<Object> response = post("", userId, bookingSaveDto);
+
+        Booking booking = (Booking) response.getBody();
+
+        return new ResponseEntity<>(booking, response.getStatusCode());
     }
 
-    public ResponseEntity<Object> responseToRequest(Long userId, long bookingId, boolean approved) {
+    public ResponseEntity<Booking> responseToRequest(Long userId, long bookingId, boolean approved) {
         Map<String, Object> parameters = Map.of(
                 "approved", approved
         );
 
-        return patch("/" + bookingId + "?approved={approved}", userId, parameters, null);
+        ResponseEntity<Object> response = patch("/" + bookingId + "?approved={approved}", userId, parameters, null);
+
+        Booking booking = (Booking) response.getBody();
+
+        return new ResponseEntity<>(booking, response.getStatusCode());
     }
 
-    public ResponseEntity<Object> findBookingById(long userId, long bookingId) {
-        return get("/" + bookingId, userId);
+    public ResponseEntity<BookingDto> findBookingById(long userId, long bookingId) {
+        ResponseEntity<Object> response = get("/" + bookingId, userId);
+
+        BookingDto bookingDto = (BookingDto) response.getBody();
+
+        return new ResponseEntity<>(bookingDto, response.getStatusCode());
     }
 
-    public ResponseEntity<Object> findAllForUser(long userId, BookingState state) {
+    public ResponseEntity<Booking> findAllForUser(long userId, BookingState state) {
         Map<String, Object> parameters = Map.of(
                 "state", state
         );
-        return get("?state={state}", userId, parameters);
+
+        ResponseEntity<Object> response = get("?state={state}", userId, parameters);
+
+        Booking booking = (Booking) response.getBody();
+
+        return new ResponseEntity<>(booking, response.getStatusCode());
     }
 
-    public ResponseEntity<Object> findReservations(long userId, BookingState state) {
+    public ResponseEntity<Booking> findReservations(long userId, BookingState state) {
         Map<String, Object> parameters = Map.of(
                 "state", state
         );
+        ResponseEntity<Object> response = get("/owner?state={state}", userId, parameters);
 
-        return get("/owner?state={state}", userId, parameters);
+        Booking booking = (Booking) response.getBody();
+
+        return new ResponseEntity<>(booking, response.getStatusCode());
     }
 }

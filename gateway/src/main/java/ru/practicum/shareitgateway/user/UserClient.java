@@ -1,6 +1,5 @@
 package ru.practicum.shareitgateway.user;
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -27,23 +26,33 @@ public class UserClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> save(@RequestBody @Valid User user) {
-        return post("", user);
+    public ResponseEntity<User> save(@RequestBody User user) {
+        ResponseEntity<Object> response = post("", user);
+        User userEntity = (User) response.getBody();
+        return new ResponseEntity<>(userEntity, response.getStatusCode());
     }
 
-    public ResponseEntity<Object> findById(long userId) {
-        return get("/" + userId);
+    public ResponseEntity<User> findById(long userId) {
+        ResponseEntity<Object> response = get("/" + userId);
+        User userEntity = (User) response.getBody();
+        return new ResponseEntity<>(userEntity, response.getStatusCode());
     }
 
-    public ResponseEntity<Object> findAll() {
-        return get("");
+    public ResponseEntity<User> findAll() {
+        ResponseEntity<Object> response = get("");
+        User user = (User) response.getBody();
+        return new ResponseEntity<>(user, response.getStatusCode());
     }
 
-    public ResponseEntity<Object> update(long userId, UserDto userDto) {
-        return patch("/" + userId, userDto);
+    public ResponseEntity<User> update(long userId, UserDto userDto) {
+        ResponseEntity<Object> response = patch("/" + userId, userDto);
+        User user = (User) response.getBody();
+        return new ResponseEntity<>(user, response.getStatusCode());
     }
 
-    public ResponseEntity<Object> deleteById(long userId) {
-        return delete("/" + userId);
+    public ResponseEntity<User> deleteById(long userId) {
+        ResponseEntity<Object> response = delete("/" + userId);
+        User user = (User) response.getBody();
+        return new ResponseEntity<>(user, response.getStatusCode());
     }
 }

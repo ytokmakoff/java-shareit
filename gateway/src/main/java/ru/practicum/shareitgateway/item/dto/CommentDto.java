@@ -1,10 +1,9 @@
-package ru.practicum.shareitserver.item.dto;
+package ru.practicum.shareitgateway.item.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import ru.practicum.shareitserver.item.model.Item;
 
 import java.time.LocalDate;
 

@@ -39,7 +39,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void testSaveUser() {
+    void saveUserSuccessfully() {
         User user = new User();
         user.setName("Alice");
         user.setEmail("alice@example.com");
@@ -55,7 +55,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void testSaveUserWithExistingEmail() {
+    void saveUserWithExistingEmailSuccessfully() {
         User user1 = new User();
         user1.setName("Bob");
         user1.setEmail("bob@example.com");
@@ -72,7 +72,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void testFindById() {
+    void findByIdSuccessfully() {
         User user = new User();
         user.setName("David");
         user.setEmail("david@example.com");
@@ -86,14 +86,14 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void testFindByIdNotFound() {
+    void findByIdNotFoundSuccessfully() {
         assertThatThrownBy(() -> userService.findById(999L))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("User with id 999 not found");
     }
 
     @Test
-    void testFindAll() {
+    void findAllSuccessfully() {
         User user1 = new User();
         user1.setName("Eve");
         user1.setEmail("eve@example.com");
@@ -111,7 +111,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void testUpdateUser() {
+    void updateUserSuccessfully() {
         User user = new User();
         user.setName("Grace");
         user.setEmail("grace@example.com");
@@ -135,7 +135,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void testUpdateUserWithExistingEmail() {
+    void updateUserWithExistingEmail() {
         User user1 = new User();
         user1.setName("Hannah");
         user1.setEmail("hannah@example.com");
@@ -155,7 +155,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void testDeleteById() {
+    void deleteByIdSuccessfully() {
         User user = new User();
         user.setName("Jack");
         user.setEmail("jack@example.com");
@@ -169,7 +169,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void testDeleteByIdNotFound() {
+    void deleteByIdNotFound() {
         assertThatThrownBy(() -> userService.deleteById(999L))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("User with id 999 not found");

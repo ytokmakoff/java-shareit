@@ -50,7 +50,7 @@ public class ItemServiceImplTest {
     }
 
     @Test
-    void testSaveItem() {
+    void saveItem() {
         ItemDto itemDto = new ItemDto();
         itemDto.setName("Test Item");
         itemDto.setDescription("Test Description");
@@ -68,7 +68,7 @@ public class ItemServiceImplTest {
     }
 
     @Test
-    void testUpdateItem() {
+    void updateItem() {
         UpdateItemDto updateItemDto = new UpdateItemDto();
         updateItemDto.setName("Updated Item");
         updateItemDto.setDescription("Updated Description");
@@ -83,7 +83,7 @@ public class ItemServiceImplTest {
     }
 
     @Test
-    void testFindById() {
+    void findById() {
         ItemWithCommentsDto foundItemDto = itemService.findById(availableItem.getId());
 
         assertThat(foundItemDto.getId(), equalTo(availableItem.getId()));
@@ -92,21 +92,21 @@ public class ItemServiceImplTest {
     }
 
     @Test
-    void testAllItemsFromUser() {
+    void allItemsFromUser() {
         List<ItemWithBookingDateDto> items = itemService.allItemsFromUser(itemOwner.getId());
 
         assertThat(items.get(0).getId(), equalTo(availableItem.getId()));
     }
 
     @Test
-    void testSearchItems() {
+    void searchItems() {
         List<ItemDto> items = itemService.search("Test");
 
         assertThat(items.get(0).getName(), containsString("Test"));
     }
 
     @Test
-    void testSearchWithBlankText() {
+    void searchWithBlankText() {
         String blankSearchText = " ";
 
         List<ItemDto> result = itemService.search(blankSearchText);
@@ -115,7 +115,7 @@ public class ItemServiceImplTest {
     }
 
     @Test
-    void testSaveComment_ItemNotFound() {
+    void saveComment_ItemNotFound() {
         User user = new User();
         user.setName("Test User");
         user.setEmail("testuser@example.com");
@@ -130,7 +130,7 @@ public class ItemServiceImplTest {
     }
 
     @Test
-    void testFindById_ItemNotFound() {
+    void findById_ItemNotFound() {
         long nonExistentItemId = 999L;
 
         assertThatThrownBy(() -> itemService.findById(nonExistentItemId))

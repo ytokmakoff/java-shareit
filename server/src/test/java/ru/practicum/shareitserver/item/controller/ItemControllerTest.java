@@ -73,7 +73,7 @@ class ItemControllerTest {
 
 
     @Test
-    void save() throws Exception {
+    void saveShouldSaveItemSuccessfully() throws Exception {
         when(itemService.save(any(), anyLong()))
                 .thenReturn(item);
 
@@ -91,7 +91,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void update() throws Exception {
+    void updateItemSuccessfully() throws Exception {
         long itemId = 1L;
         long userId = owner.getId();
 
@@ -112,7 +112,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void findById() throws Exception {
+    void findByIdRetrieveItemByIdSuccessfully() throws Exception {
         long itemId = 1L;
 
         ItemWithCommentsDto itemWithCommentsDto = new ItemWithCommentsDto(
@@ -139,7 +139,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void allItemsFromUser() throws Exception {
+    void findAllRetrieveAllItemsFromUserSuccessfully() throws Exception {
         long userId = 42L;
 
         ItemWithBookingDateDto item1 = new ItemWithBookingDateDto(1L, "Item 1", "Description 1", true, LocalDateTime.of(2024, 10, 1, 10, 0), LocalDateTime.of(2024, 11, 1, 10, 0));
@@ -168,7 +168,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void search() throws Exception {
+    void searchItemsByTextSuccessfully() throws Exception {
         String searchText = "item";
 
         // Создание данных для теста
@@ -194,7 +194,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void saveComment() throws Exception {
+    void saveCommentForItemSuccessfully() throws Exception {
         long userId = 42L;
         long itemId = 1L;
 

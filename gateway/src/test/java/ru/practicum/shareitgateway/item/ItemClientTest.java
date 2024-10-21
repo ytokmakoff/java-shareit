@@ -12,9 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
-import ru.practicum.shareitgateway.item.dto.Comment;
-import ru.practicum.shareitgateway.item.dto.ItemDto;
-import ru.practicum.shareitgateway.item.dto.UpdateItemDto;
+import ru.practicum.shareitgateway.item.dto.*;
 
 import java.util.function.Supplier;
 
@@ -46,7 +44,7 @@ class ItemClientTest {
     }
 
     @Test
-    void testSave() {
+    void saveItem_ShouldReturnResponseEntityWithOkStatus() {
         long userId = 1L;
         ItemDto itemDto = new ItemDto();
 
@@ -54,7 +52,7 @@ class ItemClientTest {
         when(restTemplate.exchange(anyString(), eq(HttpMethod.POST), any(HttpEntity.class), eq(Object.class)))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<Object> response = itemClient.save(itemDto, userId);
+        ResponseEntity<Item> response = itemClient.save(itemDto, userId);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -62,7 +60,7 @@ class ItemClientTest {
     }
 
     @Test
-    void testUpdate() {
+    void updateItem_ShouldReturnResponseEntityWithOkStatus() {
         long itemId = 123L;
         long userId = 1L;
         UpdateItemDto updateItemDto = new UpdateItemDto();
@@ -71,7 +69,7 @@ class ItemClientTest {
         when(restTemplate.exchange(eq("/" + itemId), eq(HttpMethod.PATCH), any(HttpEntity.class), eq(Object.class)))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<Object> response = itemClient.update(itemId, updateItemDto, userId);
+        ResponseEntity<Item> response = itemClient.update(itemId, updateItemDto, userId);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -79,14 +77,14 @@ class ItemClientTest {
     }
 
     @Test
-    void testFindById() {
+    void findItemById_ShouldReturnResponseEntityWithOkStatus() {
         long itemId = 123L;
 
         ResponseEntity<Object> mockResponse = new ResponseEntity<>(HttpStatus.OK);
         when(restTemplate.exchange(eq("/" + itemId), eq(HttpMethod.GET), any(HttpEntity.class), eq(Object.class)))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<Object> response = itemClient.findById(itemId);
+        ResponseEntity<ItemWithCommentsDto> response = itemClient.findById(itemId);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -94,14 +92,14 @@ class ItemClientTest {
     }
 
     @Test
-    void testAllItemsFromUser() {
+    void findAllItemsFromUser_ShouldReturnResponseEntityWithOkStatus() {
         long userId = 1L;
 
         ResponseEntity<Object> mockResponse = new ResponseEntity<>(HttpStatus.OK);
         when(restTemplate.exchange(eq(""), eq(HttpMethod.GET), any(HttpEntity.class), eq(Object.class)))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<Object> response = itemClient.allItemsFromUser(userId);
+        ResponseEntity<ItemWithBookingDateDto> response = itemClient.allItemsFromUser(userId);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -109,14 +107,14 @@ class ItemClientTest {
     }
 
     @Test
-    void testSearch() {
+    void searchItems_ShouldReturnResponseEntityWithOkStatus() {
         String searchText = "item";
 
         ResponseEntity<Object> mockResponse = new ResponseEntity<>(HttpStatus.OK);
         when(restTemplate.exchange(eq("/search"), eq(HttpMethod.GET), any(HttpEntity.class), eq(Object.class), anyMap()))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<Object> response = itemClient.search(searchText);
+        ResponseEntity<ItemDto> response = itemClient.search(searchText);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -124,7 +122,7 @@ class ItemClientTest {
     }
 
     @Test
-    void testSaveComment() {
+    void saveComment_ShouldReturnResponseEntityWithOkStatus() {
         long userId = 1L;
         long itemId = 123L;
         Comment comment = new Comment();
@@ -133,11 +131,10 @@ class ItemClientTest {
         when(restTemplate.exchange(eq("/" + itemId + "/comment"), eq(HttpMethod.POST), any(HttpEntity.class), eq(Object.class)))
                 .thenReturn(mockResponse);
 
-        ResponseEntity<Object> response = itemClient.saveComment(userId, itemId, comment);
+        ResponseEntity<CommentDto> response = itemClient.saveComment(userId, itemId, comment);
 
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         verify(restTemplate).exchange(eq("/" + itemId + "/comment"), eq(HttpMethod.POST), any(HttpEntity.class), eq(Object.class));
     }
-
 }

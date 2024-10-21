@@ -96,7 +96,7 @@ class BookingControllerTest {
     }
 
     @Test
-    void save() throws Exception {
+    void saveBooking_ShouldReturnOkStatus() throws Exception {
         when(bookingService.save(anyLong(), any()))
                 .thenReturn(booking);
 
@@ -113,7 +113,7 @@ class BookingControllerTest {
     }
 
     @Test
-    void responseToRequest() throws Exception {
+    void responseToRequest_ShouldReturnOkStatus() throws Exception {
         long userId = 2L;
         long bookingId = booking.getId();
         boolean approved = true;
@@ -131,7 +131,7 @@ class BookingControllerTest {
     }
 
     @Test
-    void findBookingById() throws Exception {
+    void findBookingById_ShouldReturnOkStatus() throws Exception {
         long bookerId = 2L;
         long bookingId = booking.getId();
 
@@ -146,7 +146,7 @@ class BookingControllerTest {
     }
 
     @Test
-    void findAllForUser() throws Exception {
+    void findAllBookingsForUser_ShouldReturnOkStatus() throws Exception {
         long userId = 2L;
         BookingState state = BookingState.ALL;
 
@@ -162,7 +162,7 @@ class BookingControllerTest {
     }
 
     @Test
-    void findReservations() throws Exception {
+    void findReservations_ShouldReturnOkStatus() throws Exception {
         long userId = 1L;
         BookingState state = BookingState.ALL;
 
@@ -178,7 +178,7 @@ class BookingControllerTest {
     }
 
     @Test
-    void testFindBookingById_AccessDenied() throws Exception {
+    void findBookingById_ShouldReturnForbiddenStatus_WhenAccessDenied() throws Exception {
         User notOwner = new User();
         notOwner.setId(2L);
         notOwner.setName("notOwner");
@@ -198,7 +198,7 @@ class BookingControllerTest {
     }
 
     @Test
-    void testFindBookingById_NotFound() throws Exception {
+    void findBookingById_ShouldReturnNotFoundStatus_WhenBookingNotFound() throws Exception {
         long nonExistentBookingId = 999L;
         when(bookingService.findBookingById(booker.getId(), nonExistentBookingId))
                 .thenThrow(new BookingNotFoundException("booking with id " + nonExistentBookingId + " not found"));
@@ -212,7 +212,7 @@ class BookingControllerTest {
     }
 
     @Test
-    void testSaveBooking_Conflict() throws Exception {
+    void saveBooking_ShouldReturnConflictStatus_WhenBookingConflict() throws Exception {
         when(bookingService.save(any(), any()))
                 .thenThrow(new BookingConflictException("booking conflict"));
 
@@ -225,7 +225,7 @@ class BookingControllerTest {
     }
 
     @Test
-    void testSaveBookingInvalidBookingPeriodException() throws Exception {
+    void saveBooking_ShouldReturnBadRequestStatus_WhenInvalidBookingPeriod() throws Exception {
         when(bookingService.save(any(), any()))
                 .thenThrow(new InvalidBookingPeriodException("InvalidBookingPeriodException"));
 

@@ -63,7 +63,7 @@ class UserControllerTest {
     }
 
     @Test
-    void findById() throws Exception {
+    void findByIdSuccessfully() throws Exception {
         when(userService.findById(user.getId())).thenReturn(user);
 
         mvc.perform(get("/users/{userId}", user.getId())
@@ -75,7 +75,7 @@ class UserControllerTest {
     }
 
     @Test
-    void getAll() throws Exception {
+    void getAllSuccessfully() throws Exception {
         User user1 = new User();
         user1.setId(1L);
         user1.setName("John Doe");
@@ -103,7 +103,7 @@ class UserControllerTest {
     }
 
     @Test
-    void update() throws Exception {
+    void updateSuccessfully() throws Exception {
         long userId = 1L;
 
         UserDto userDto = new UserDto();
@@ -128,7 +128,7 @@ class UserControllerTest {
     }
 
     @Test
-    void deleteById() throws Exception {
+    void deleteByIdSuccessfully() throws Exception {
         long userId = 1L;
 
         doNothing().when(userService).deleteById(userId);

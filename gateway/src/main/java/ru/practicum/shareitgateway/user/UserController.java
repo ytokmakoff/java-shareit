@@ -16,25 +16,25 @@ public class UserController {
     private final UserClient userClient;
 
     @PostMapping
-    public ResponseEntity<Object> save(@RequestBody @Valid User user) {
+    public ResponseEntity<User> save(@RequestBody @Valid User user) {
         log.info("save user: {}", user);
         return userClient.save(user);
     }
 
     @GetMapping("{userId}")
-    public ResponseEntity<Object> findById(@PathVariable long userId) {
+    public ResponseEntity<User> findById(@PathVariable long userId) {
         log.info("findById userId={}", userId);
         return userClient.findById(userId);
     }
 
     @GetMapping
-    public ResponseEntity<Object> findAll() {
+    public ResponseEntity<User> findAll() {
         log.info("findAll");
         return userClient.findAll();
     }
 
     @PatchMapping("{userId}")
-    public ResponseEntity<Object> update(@PathVariable long userId,
+    public ResponseEntity<User> update(@PathVariable long userId,
                                          @Valid @RequestBody UserDto userDto) {
         log.info("update: user {} userId={}", userDto, userId);
         return userClient.update(userId, userDto);

@@ -226,7 +226,7 @@ public class BaseClientTest {
     }
 
     @Test
-    void testPatchWithBody() {
+    void patchWithBody_ShouldReturnResponseEntityWithOkStatus() {
         String path = "/test";
         String body = "{\"key\": \"value\"}";
 
@@ -242,7 +242,7 @@ public class BaseClientTest {
     }
 
     @Test
-    void testPatchWithUserId() {
+    void patchWithUserId_ShouldReturnResponseEntityWithNoContentStatus() {
         String path = "/test";
         long userId = 1L;
 
@@ -258,7 +258,7 @@ public class BaseClientTest {
     }
 
     @Test
-    void testPatchBadRequest() {
+    void patchWithBody_ShouldReturnResponseEntityWithBadRequestStatus() {
         String path = "/test";
         String body = "{\"key\": \"value\"}";
 
@@ -275,7 +275,7 @@ public class BaseClientTest {
     }
 
     @Test
-    void testPatchWithBodyBadRequest() {
+    void patchWithBody_ShouldReturnBadRequestStatusAndErrorMessage() {
         String path = "/test";
         String body = "{\"key\": \"value\"}";
 

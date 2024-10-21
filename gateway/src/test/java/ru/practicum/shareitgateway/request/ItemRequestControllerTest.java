@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 import ru.practicum.shareitgateway.request.dto.ItemRequest;
+import ru.practicum.shareitgateway.request.dto.ItemRequestDto;
 
 import static org.mockito.Mockito.*;
 
@@ -31,11 +32,11 @@ public class ItemRequestControllerTest {
         itemRequest.setDescription("Need an item");
 
         long userId = 1L;
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+        ResponseEntity<ItemRequest> expectedResponse = ResponseEntity.ok().build();
 
         when(itemRequestClient.save(itemRequest, userId)).thenReturn(expectedResponse);
 
-        ResponseEntity<Object> actualResponse = itemRequestController.save(itemRequest, userId);
+        ResponseEntity<ItemRequest> actualResponse = itemRequestController.save(itemRequest, userId);
 
         assertEquals(expectedResponse, actualResponse);
         verify(itemRequestClient).save(itemRequest, userId);
@@ -44,11 +45,11 @@ public class ItemRequestControllerTest {
     @Test
     void findByUserId_shouldCallItemRequestClientFindByUserId() {
         long userId = 1L;
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+        ResponseEntity<ItemRequestDto> expectedResponse = ResponseEntity.ok().build();
 
         when(itemRequestClient.findByUserId(userId)).thenReturn(expectedResponse);
 
-        ResponseEntity<Object> actualResponse = itemRequestController.findByUserId(userId);
+        ResponseEntity<ItemRequestDto> actualResponse = itemRequestController.findByUserId(userId);
 
         assertEquals(expectedResponse, actualResponse);
         verify(itemRequestClient).findByUserId(userId);
@@ -57,11 +58,11 @@ public class ItemRequestControllerTest {
     @Test
     void findAll_shouldCallItemRequestClientFindAll() {
         long userId = 1L;
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+        ResponseEntity<ItemRequest> expectedResponse = ResponseEntity.ok().build();
 
         when(itemRequestClient.findAll(userId)).thenReturn(expectedResponse);
 
-        ResponseEntity<Object> actualResponse = itemRequestController.findAll(userId);
+        ResponseEntity<ItemRequest> actualResponse = itemRequestController.findAll(userId);
 
         assertEquals(expectedResponse, actualResponse);
         verify(itemRequestClient).findAll(userId);
@@ -70,11 +71,11 @@ public class ItemRequestControllerTest {
     @Test
     void findById_shouldCallItemRequestClientFindById() {
         long requestId = 1L;
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+        ResponseEntity<ItemRequestDto> expectedResponse = ResponseEntity.ok().build();
 
         when(itemRequestClient.findById(requestId)).thenReturn(expectedResponse);
 
-        ResponseEntity<Object> actualResponse = itemRequestController.findById(requestId);
+        ResponseEntity<ItemRequestDto> actualResponse = itemRequestController.findById(requestId);
 
         assertEquals(expectedResponse, actualResponse);
         verify(itemRequestClient).findById(requestId);

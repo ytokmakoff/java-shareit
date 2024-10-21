@@ -60,7 +60,7 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void save() throws Exception {
+    void saveSuccessfully() throws Exception {
         when(itemRequestService
                 .save(any(), anyLong()))
                 .thenReturn(itemRequest);
@@ -76,7 +76,7 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void findByUserId() throws Exception {
+    void findByUserIdSuccessfully() throws Exception {
         long userId = 42L;
 
         User user = new User();
@@ -112,7 +112,7 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void findAll() throws Exception {
+    void findAllSuccessfully() throws Exception {
         long userId = 42L;
 
         ItemRequest itemRequest1 = new ItemRequest();
@@ -139,7 +139,7 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void findById() throws Exception {
+    void findByIdSuccessfully() throws Exception {
         long requestId = 1L;
 
         User user = new User();

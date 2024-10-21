@@ -65,7 +65,7 @@ class ItemRequestServiceImplTest {
 
 
     @Test
-    void testSaveItemRequest() {
+    void saveItemRequestSuccessfully() {
         ItemRequest itemRequest = new ItemRequest();
         itemRequest.setDescription("New item request");
 
@@ -81,7 +81,7 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
-    void testFindByUserId() {
+    void findByUserIdSuccessfully() {
         ItemRequest itemRequest = new ItemRequest();
         itemRequest.setDescription("Item request by user");
         itemRequest.setUser(booker);
@@ -99,7 +99,7 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
-    void testFindAll() {
+    void findAllSuccessfully() {
         ItemRequest itemRequest1 = new ItemRequest();
         itemRequest1.setDescription("First request");
         itemRequest1.setUser(itemOwner);
@@ -119,7 +119,7 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
-    void testFindById() {
+    void findByIdSuccessfully() {
         ItemRequest itemRequest = new ItemRequest();
         itemRequest.setDescription("Find by ID request");
         itemRequest.setUser(booker);
@@ -138,14 +138,14 @@ class ItemRequestServiceImplTest {
     }
 
     @Test
-    void testFindByIdNotFound() {
+    void findByIdNotFoundSuccessfully() {
         long nonExistentRequestId = 999L;
 
         assertThrows(ItemRequestNotFoundException.class, () -> itemRequestService.findById(nonExistentRequestId));
     }
 
     @Test
-    void testFindAll_UserNotFound() {
+    void findAll_UserNotFoundSuccessfully() {
         long nonExistentUserId = 999L;
 
         assertThatThrownBy(() -> itemRequestService.findAll(nonExistentUserId))

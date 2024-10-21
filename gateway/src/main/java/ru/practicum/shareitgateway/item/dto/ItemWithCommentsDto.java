@@ -5,18 +5,22 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import ru.practicum.shareitgateway.user.dto.User;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class Item {
+public class ItemWithCommentsDto {
     private long id;
     @NotBlank
     private String name;
+    @NotBlank
     private String description;
     @NotNull
     private Boolean available;
-    private User owner;
-    private long requestId;
+    private LocalDateTime lastBooking;
+    private LocalDateTime nextBooking;
+    private List<Comment> comments;
 }

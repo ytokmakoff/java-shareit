@@ -81,9 +81,8 @@ class BookingServiceImplTest {
         availableItem = itemRepository.save(availableItem);
     }
 
-
     @Test
-    void testSaveBooking() {
+    void saveBooking_ShouldReturnOkStatus() {
         BookingSaveDto bookingSaveDto = new BookingSaveDto(
                 availableItem.getId(),
                 LocalDateTime.now().plusDays(1),
@@ -104,7 +103,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void testSaveUserNotFound() {
+    void saveBookingShouldReturnNotFoundException() {
         BookingSaveDto bookingSaveDto = new BookingSaveDto(
                 availableItem.getId(),
                 LocalDateTime.now().plusDays(1),
@@ -115,7 +114,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void testSaveItemNotAvailable() {
+    void saveBookingWhenItemNotAvailable() {
         Item unavailableItem = new Item();
         unavailableItem.setName("Unavailable Item");
         unavailableItem.setDescription("An item that is not available for booking");
@@ -133,7 +132,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void testSaveInvalidBookingPeriod() {
+    void saveBookingBookingInvalidPerion() {
         BookingSaveDto bookingSaveDto = new BookingSaveDto(
                 availableItem.getId(),
                 LocalDateTime.now().plusDays(2),
@@ -144,7 +143,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void testSaveConflictingBooking() {
+    void saveBookingConflictingBookingTime() {
         BookingSaveDto bookingSaveDto1 = new BookingSaveDto(
                 availableItem.getId(),
                 LocalDateTime.now().plusDays(1),
@@ -162,7 +161,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void testSaveItemNotFound() {
+    void saveBookingItemNotFound() {
         BookingSaveDto bookingSaveDto = new BookingSaveDto(
                 999L,
                 LocalDateTime.now().plusDays(1),
@@ -173,7 +172,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void testResponseToRequestApprove() {
+    void responseToRequestApprove() {
         Booking waitingBooking = new Booking();
         waitingBooking.setStart(LocalDateTime.now().plusDays(1));
         waitingBooking.setEnd(LocalDateTime.now().plusDays(2));
@@ -191,7 +190,7 @@ class BookingServiceImplTest {
 
 
     @Test
-    void testResponseToRequestReject() {
+    void responseToRequestReject() {
         Booking newBooking = new Booking();
         newBooking.setItem(availableItem);
         newBooking.setBooker(booker);
@@ -209,7 +208,7 @@ class BookingServiceImplTest {
 
 
     @Test
-    void testResponseToRequestUserNotOwner() {
+    void responseToRequestUserNotOwner() {
         booking = new Booking();
         booking.setItem(availableItem);
         booking.setBooker(booker);
@@ -227,7 +226,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void testResponseToRequestAlreadyProcessed() {
+    void responseToRequestAlreadyProcessed() {
         booking = new Booking();
         booking.setItem(availableItem);
         booking.setBooker(booker);
@@ -245,12 +244,12 @@ class BookingServiceImplTest {
 
 
     @Test
-    void testResponseToRequestBookingNotFound() {
+    void responseToRequestBookingNotFound() {
         assertThrows(BookingNotFoundException.class, () -> bookingService.responseToRequest(booker.getId(), 999L, true));
     }
 
     @Test
-    void testFindBookingByIdAsBooker() {
+    void findBookingByIdAsBooker() {
         booking = new Booking();
         booking.setItem(availableItem);
         booking.setBooker(booker);
@@ -266,7 +265,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void testFindBookingByIdAccessDenied() {
+    void findBookingByIdAccessDenied() {
         booking = new Booking();
         booking.setItem(availableItem);
         booking.setBooker(booker);
@@ -284,13 +283,13 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void testFindBookingByIdNotFound() {
+    void findBookingByIdNotFound() {
         long nonExistentBookingId = 999L;
         assertThrows(BookingNotFoundException.class, () -> bookingService.findBookingById(booker.getId(), nonExistentBookingId));
     }
 
     @Test
-    void testFindAllBookingsForUserAll() {
+    void findAllBookingsForUserAll() {
         Booking pastBooking = new Booking();
         pastBooking.setStart(LocalDateTime.now().plusDays(1));
         pastBooking.setEnd(LocalDateTime.now().plusDays(2));
@@ -306,7 +305,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void testFindAllBookingsForUserCurrent() {
+    void findAllBookingsForUserCurrent() {
         Booking currentBooking = new Booking();
         currentBooking.setStart(LocalDateTime.now().minusDays(1));
         currentBooking.setEnd(LocalDateTime.now().plusDays(1));
@@ -323,7 +322,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void testFindAllBookingsForUserPast() {
+    void findAllBookingsForUserPast() {
         Booking pastBooking = new Booking();
         pastBooking.setStart(LocalDateTime.now().minusDays(3));
         pastBooking.setEnd(LocalDateTime.now().minusDays(2));
@@ -340,7 +339,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void testFindAllBookingsForUserFuture() {
+    void findAllBookingsForUserFuture() {
         booking = new Booking();
         booking.setItem(availableItem);
         booking.setBooker(booker);
@@ -358,7 +357,7 @@ class BookingServiceImplTest {
 
 
     @Test
-    void testFindAllBookingsForUserWaiting() {
+    void findAllBookingsForUserWaiting() {
         booking = new Booking();
         booking.setItem(availableItem);
         booking.setBooker(booker);
@@ -374,7 +373,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void testFindAllBookingsForUserRejected() {
+    void findAllBookingsForUserRejected() {
         Booking rejectedBooking = new Booking();
         rejectedBooking.setStart(LocalDateTime.now().plusDays(1));
         rejectedBooking.setEnd(LocalDateTime.now().plusDays(2));
@@ -391,7 +390,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void testFindAllReservations() {
+    void findAllReservations() {
         booking = new Booking();
         booking.setItem(availableItem);
         booking.setBooker(booker);
@@ -406,7 +405,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void testFindCurrentReservations() {
+    void findCurrentReservations() {
         Booking newBooking = new Booking();
 
         newBooking.setItem(availableItem);
@@ -424,7 +423,7 @@ class BookingServiceImplTest {
 
 
     @Test
-    void testFindPastReservations() {
+    void findPastReservations() {
         Booking pastBooking = new Booking();
         pastBooking.setItem(availableItem);
         pastBooking.setBooker(booker);
@@ -441,7 +440,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void testFindFutureReservations() {
+    void findFutureReservations() {
         booking = new Booking();
         booking.setItem(availableItem);
         booking.setBooker(booker);
@@ -457,7 +456,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void testFindWaitingReservations() {
+    void findWaitingReservations() {
         booking = new Booking();
         booking.setItem(availableItem);
         booking.setBooker(booker);
@@ -474,7 +473,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void testFindRejectedReservations() {
+    void findRejectedReservations() {
         Booking rejectedBooking = new Booking();
         rejectedBooking.setItem(availableItem);
         rejectedBooking.setBooker(booker);
@@ -491,7 +490,7 @@ class BookingServiceImplTest {
     }
 
     @Test
-    void testFindReservationsNoBookingsFound() {
+    void findReservationsNoBookingsFound() {
         long userId = booker.getId();
         BookingState state = BookingState.ALL;
 
